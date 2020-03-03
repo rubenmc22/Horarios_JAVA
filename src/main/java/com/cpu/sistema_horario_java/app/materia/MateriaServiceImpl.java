@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.cpu.sistema_horario_java.util.exception.HorarioException;
 
-import static com.cpu.sistema_horario_java.util.exception.EntityType.Materia;
+import static com.cpu.sistema_horario_java.util.exception.EntityType.MATERIA;
 import static com.cpu.sistema_horario_java.util.exception.ExceptionType.ENTITY_NOT_FOUND;
 
 @Service
@@ -26,7 +26,7 @@ public class MateriaServiceImpl implements MateriaService {
 
         }
 
-        throw HorarioException.throwException(Materia, ENTITY_NOT_FOUND, dto.getNombre());
+        throw HorarioException.throwException(MATERIA, ENTITY_NOT_FOUND, dto.getNombre());
 
     }
 }

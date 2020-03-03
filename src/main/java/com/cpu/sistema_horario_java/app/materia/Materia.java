@@ -23,7 +23,7 @@ public class Materia {
     @Column(name = "descripcion", length = 100)
     private String descripcion;
 
-    @Column(name = "descripcion")
+    @Column(name = "estatus")
     private Boolean estatus = true;
 
 }
