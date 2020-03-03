@@ -1,4 +1,4 @@
-package com.cpu.sistema_horario_java.util.exception;
+package com.cpu.sistema_horario_java.exception;
 
 import com.cpu.sistema_horario_java.config.PropertiesConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +13,13 @@ import java.util.Optional;
  * Created by Arpit Khandelwal.
  */
 @Component
-public class BRSException {
+public class HorarioException {
 
     private static PropertiesConfig propertiesConfig;
 
     @Autowired
-    public BRSException(PropertiesConfig propertiesConfig) {
-        BRSException.propertiesConfig = propertiesConfig;
+    public HorarioException(PropertiesConfig propertiesConfig) {
+        HorarioException.propertiesConfig = propertiesConfig;
     }
 
     /**

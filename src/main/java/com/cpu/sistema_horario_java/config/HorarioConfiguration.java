@@ -21,7 +21,7 @@ import java.util.Arrays;
  */
 @Configuration
 @EnableSwagger2
-public class BrsConfiguration {
+public class HorarioConfiguration {
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
