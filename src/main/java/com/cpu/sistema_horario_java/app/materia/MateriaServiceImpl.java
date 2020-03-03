@@ -11,7 +11,6 @@ import static com.cpu.sistema_horario_java.util.exception.ExceptionType.ENTITY_N
 
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
