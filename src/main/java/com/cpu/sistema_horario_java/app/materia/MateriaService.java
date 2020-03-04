@@ -4,6 +4,14 @@ import java.util.Set;
 
 public interface MateriaService {
 
-    Set<MateriaDTO> getAllMaterias();
+    MateriaDTO buscar(Long id);
+
+    Set<MateriaDTO> listar();
+
+    MateriaDTO guardar(MateriaDTO materia);
+
+    MateriaDTO actualizar(Long id, MateriaDTO materia);
+
+    void eliminar(Long id);
 
 }

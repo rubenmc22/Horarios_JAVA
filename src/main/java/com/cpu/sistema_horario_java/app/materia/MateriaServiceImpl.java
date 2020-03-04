@@ -1,14 +1,9 @@
 package com.cpu.sistema_horario_java.app.materia;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cpu.sistema_horario_java.util.exception.HorarioException;
-
-import static com.cpu.sistema_horario_java.util.exception.EntityType.MATERIA;
-import static com.cpu.sistema_horario_java.util.exception.ExceptionType.ENTITY_NOT_FOUND;
-
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -21,26 +16,47 @@ public class MateriaServiceImpl implements MateriaService {
 
     @Autowired
     MateriaMapper matMapper;
-    @Autowired
-    ModelMapper modMapper;
 
-    public MateriaDTO crear(MateriaDTO dto) {
+    @Override
+    public MateriaDTO buscar(Long id) {
+        Optional<Materia> materia = repo.findById(id);
 
-        MateriaDTO materia = repo.findByNombe(dto.getNombre());
-
-        if (materia == null) {
-            return matMapper.toDTO(matMapper.toModel(dto));
-
+        if (materia.isPresent()) {
+            return matMapper.toDTO(materia.get());
         }
-
-        throw HorarioException.throwException(MATERIA, ENTITY_NOT_FOUND, dto.getNombre());
-
+        return null;
     }
 
     @Override
-    public Set<MateriaDTO> getAllMaterias() {
-        return repo.findAll().stream()
-        .map(materia -> modMapper.map(materia, MateriaDTO.class))
-        .collect(Collectors.toCollection(TreeSet::new));
+    public Set<MateriaDTO> listar() {
+        return repo.findAll().stream().map(materia -> matMapper.toDTO(materia))
+                .collect(Collectors.toCollection(TreeSet::new));
+    }
+
+    @Override
+    public MateriaDTO guardar(MateriaDTO dto) {
+        Optional<MateriaDTO> materia = repo.findByNombre(dto.getNombre());
+
+        if (!materia.isPresent()) {
+            return matMapper.toDTO(matMapper.toModel(dto));
+        }
+
+        return null;
+    }
+
+    @Override
+    public MateriaDTO actualizar(Long id, MateriaDTO materia) {
+
+        return repo.findById(id).map(m -> {
+            return matMapper.toDTO(repo.save(matMapper.toModel(materia, m)));
+        }).orElseGet(() -> {
+            materia.setId(id);
+            return matMapper.toDTO(repo.save(matMapper.toModel(materia)));
+        });
+    }
+
+    @Override
+    public void eliminar(Long id) {
+        repo.deleteById(id);
     }
 }

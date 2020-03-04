@@ -1,7 +1,5 @@
 package com.cpu.sistema_horario_java;
 
-import java.util.Optional;
-
 import com.cpu.sistema_horario_java.app.materia.Materia;
 import com.cpu.sistema_horario_java.app.materia.MateriaRepository;
 
@@ -10,7 +8,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import lombok.extern.slf4j.Slf4j;
+
 @SpringBootApplication
+@Slf4j
 public class SistemaHorario {
 
 	public static void main(String[] args) {
@@ -21,13 +22,9 @@ public class SistemaHorario {
 	CommandLineRunner init(MateriaRepository matRepo) {
 
 		return args -> {
-			Optional<Materia> optMateria = matRepo.findById(1L);
-
-			if (!optMateria.isPresent()) {
-				Materia materia = new Materia();
-				materia.setNombre("Matemática");
-				matRepo.save(materia);
-			}
+			log.info("Preloading: " + matRepo.save(new Materia("Matemática")));
+			log.info("Preloading: " + matRepo.save(new Materia("Física")));
+			log.info("Preloading: " + matRepo.save(new Materia("Química")));
 		};
 	}
 

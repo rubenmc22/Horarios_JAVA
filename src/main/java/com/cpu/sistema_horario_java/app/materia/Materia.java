@@ -7,8 +7,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "materias")
 public class Materia {
@@ -25,5 +27,9 @@ public class Materia {
 
     @Column(name = "estatus")
     private Boolean estatus = true;
+
+    public Materia(String nombre) {
+        this.nombre = nombre;
+    }
 
 }

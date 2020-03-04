@@ -1,5 +1,8 @@
 package com.cpu.sistema_horario_java.app.profesor;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ProfesorMapper {
 
     public Profesor toModel(ProfesorDTO dto) {
