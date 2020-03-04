@@ -1,6 +1,5 @@
 package com.cpu.sistema_horario_java.util.exception;
 
-import java.text.FieldPosition;
 import java.text.MessageFormat;
 import java.util.Optional;
 
