@@ -1,14 +1,12 @@
 package com.cpu.sistema_horario_java.app.controller.v1.api;
 
 import java.util.List;
-import java.util.Set;
 
 import com.cpu.sistema_horario_java.app.materia.MateriaDTO;
-import com.cpu.sistema_horario_java.app.materia.MateriaMapper;
-import com.cpu.sistema_horario_java.app.materia.MateriaRepository;
 import com.cpu.sistema_horario_java.app.materia.MateriaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,11 +29,11 @@ public class MateriaController {
     }
 
     @GetMapping
-    Set<MateriaDTO> listar() {
+    List<MateriaDTO> listar() {
         return service.listar();
     }
 
-    @PostMapping
+    @PostMapping(consumes = { "text/plain;charset=UTF-8", MediaType.APPLICATION_JSON_VALUE })
     MateriaDTO guardar(@RequestBody MateriaDTO dto) {
         return service.guardar(dto);
     }

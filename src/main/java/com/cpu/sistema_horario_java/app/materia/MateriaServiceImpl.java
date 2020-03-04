@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.Set;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -28,9 +28,9 @@ public class MateriaServiceImpl implements MateriaService {
     }
 
     @Override
-    public Set<MateriaDTO> listar() {
+    public List<MateriaDTO> listar() {
         return repo.findAll().stream().map(materia -> matMapper.toDTO(materia))
-                .collect(Collectors.toCollection(TreeSet::new));
+                .collect(Collectors.toList());
     }
 
     @Override

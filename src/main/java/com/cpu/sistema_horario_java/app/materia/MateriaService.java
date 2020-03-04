@@ -1,12 +1,12 @@
 package com.cpu.sistema_horario_java.app.materia;
 
-import java.util.Set;
+import java.util.List;
 
 public interface MateriaService {
 
     MateriaDTO buscar(Long id);
 
-    Set<MateriaDTO> listar();
+    List<MateriaDTO> listar();
 
     MateriaDTO guardar(MateriaDTO materia);
 
