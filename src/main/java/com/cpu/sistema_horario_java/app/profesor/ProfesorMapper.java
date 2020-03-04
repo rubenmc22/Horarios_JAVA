@@ -6,29 +6,54 @@ import org.springframework.stereotype.Component;
 public class ProfesorMapper {
 
     public Profesor toModel(ProfesorDTO dto) {
-        Profesor modelo = new Profesor();
+        Profesor model = new Profesor();
 
-        modelo.setId(dto.getId());
-        modelo.setNombre(dto.getNombre());
-        modelo.setApellido(dto.getApellido());
-        modelo.setCedula(dto.getCedula());
-        modelo.setTelefono(dto.getTelefono());
-        modelo.setCorreo(dto.getCorreo());
-        modelo.setEstatus(dto.getEstatus());
+        model.setId(dto.getId());
+        model.setNombre(dto.getNombre());
+        model.setApellido(dto.getApellido());
+        model.setCedula(dto.getCedula());
+        model.setTelefono(dto.getTelefono());
+        model.setCorreo(dto.getCorreo());
+        model.setEstatus(dto.getEstatus());
 
-        return modelo;
+        return model;
     }
 
-    public ProfesorDTO toDTO(Profesor modelo) {
+    public Profesor toModel(ProfesorDTO dto, Profesor model) {
+
+        model.setNombre(dto.getNombre());
+        model.setApellido(dto.getApellido());
+        model.setCedula(dto.getCedula());
+        model.setTelefono(dto.getTelefono());
+        model.setCorreo(dto.getCorreo());
+        model.setEstatus(dto.getEstatus());
+
+        return model;
+    }
+
+    public ProfesorDTO toDTO(Profesor model) {
         ProfesorDTO dto = new ProfesorDTO();
 
-        dto.setId(modelo.getId());
-        dto.setNombre(modelo.getNombre());
-        dto.setApellido(modelo.getApellido());
-        dto.setCedula(modelo.getCedula());
-        dto.setTelefono(modelo.getTelefono());
-        dto.setCorreo(modelo.getCorreo());
-        dto.setEstatus(modelo.getEstatus());
+        dto.setId(model.getId());
+        dto.setNombre(model.getNombre());
+        dto.setApellido(model.getApellido());
+        dto.setCedula(model.getCedula());
+        dto.setTelefono(model.getTelefono());
+        dto.setCorreo(model.getCorreo());
+        dto.setEstatus(model.getEstatus());
+
+        return dto;
+    }
+
+    public ProfesorDTO toDTO(Profesor model, ProfesorDTO dto) {
+
+        dto.setId(model.getId());
+        dto.setNombre(model.getNombre());
+        dto.setApellido(model.getApellido());
+        dto.setCedula(model.getCedula());
+        dto.setTelefono(model.getTelefono());
+        dto.setCorreo(model.getCorreo());
+        dto.setEstatus(model.getEstatus());
 
         return dto;
     }

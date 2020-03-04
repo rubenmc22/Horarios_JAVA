@@ -51,7 +51,7 @@ public class MateriaServiceImpl implements MateriaService {
     }
 
     @Override
-    public MateriaDTO actualizar(Long id, MateriaDTO materia) {
+    public MateriaDTO reemplazar(Long id, MateriaDTO materia) {
 
         return repo.findById(id).map(m -> {
             return matMapper.toDTO(repo.save(matMapper.toModel(materia, m)));

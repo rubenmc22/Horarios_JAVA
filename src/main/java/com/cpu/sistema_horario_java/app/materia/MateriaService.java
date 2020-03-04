@@ -10,7 +10,7 @@ public interface MateriaService {
 
     MateriaDTO guardar(MateriaDTO materia);
 
-    MateriaDTO actualizar(Long id, MateriaDTO materia);
+    MateriaDTO reemplazar(Long id, MateriaDTO materia);
 
     void eliminar(Long id);
 
