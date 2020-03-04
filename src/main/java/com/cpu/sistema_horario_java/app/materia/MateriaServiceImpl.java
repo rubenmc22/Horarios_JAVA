@@ -7,6 +7,14 @@ import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.cpu.sistema_horario_java.util.EntityType;
+import com.cpu.sistema_horario_java.util.exception.ExceptionType;
+import com.cpu.sistema_horario_java.util.exception.SystemException;
+
+import static com.cpu.sistema_horario_java.util.EntityType.MATERIA;
+import static com.cpu.sistema_horario_java.util.exception.ExceptionType.DUPLICATE_ENTITY;
+import static com.cpu.sistema_horario_java.util.exception.ExceptionType.ENTITY_NOT_FOUND;
+
 @Service
 public class MateriaServiceImpl implements MateriaService {
 
@@ -23,13 +31,12 @@ public class MateriaServiceImpl implements MateriaService {
         if (materia.isPresent()) {
             return matMapper.toDTO(materia.get());
         }
-        return null;
+        throw exception(MATERIA, ENTITY_NOT_FOUND, id.toString());
     }
 
     @Override
     public List<MateriaDTO> listar() {
-        return repo.findAll().stream().map(materia -> matMapper.toDTO(materia))
-                .collect(Collectors.toList());
+        return repo.findAll().stream().map(materia -> matMapper.toDTO(materia)).collect(Collectors.toList());
     }
 
     @Override
@@ -37,10 +44,10 @@ public class MateriaServiceImpl implements MateriaService {
         Optional<MateriaDTO> materia = repo.findByNombre(dto.getNombre());
 
         if (!materia.isPresent()) {
-            return matMapper.toDTO(matMapper.toModel(dto));
+            return matMapper.toDTO(repo.save(matMapper.toModel(dto)));
         }
 
-        return null;
+        throw exception(MATERIA, DUPLICATE_ENTITY, dto.getNombre());
     }
 
     @Override
@@ -56,6 +63,23 @@ public class MateriaServiceImpl implements MateriaService {
 
     @Override
     public void eliminar(Long id) {
-        repo.deleteById(id);
+        Optional<Materia> materia = repo.findById(id);
+
+        if (materia.isPresent()) {
+            repo.delete(materia.get());
+        }
+        throw exception(MATERIA, ENTITY_NOT_FOUND, id.toString());
+    }
+
+    /**
+     * Returns a new RuntimeException
+     *
+     * @param entityType
+     * @param exceptionType
+     * @param args
+     * @return
+     */
+    static RuntimeException exception(EntityType entityType, ExceptionType exceptionType, String... args) {
+        return SystemException.throwException(entityType, exceptionType, args);
     }
 }

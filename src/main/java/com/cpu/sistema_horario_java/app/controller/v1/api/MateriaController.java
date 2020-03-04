@@ -33,7 +33,7 @@ public class MateriaController {
         return service.listar();
     }
 
-    @PostMapping(consumes = { "text/plain;charset=UTF-8", MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping
     MateriaDTO guardar(@RequestBody MateriaDTO dto) {
         return service.guardar(dto);
     }
