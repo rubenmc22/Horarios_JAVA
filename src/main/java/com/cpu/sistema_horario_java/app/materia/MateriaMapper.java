@@ -18,7 +18,6 @@ public class MateriaMapper {
 
     public Materia toModel(MateriaDTO dto, Materia model) {
 
-        model.setId(dto.getId());
         model.setNombre(dto.getNombre());
         model.setDescripcion(dto.getDescripcion());
         model.setEstatus(dto.getEstatus());

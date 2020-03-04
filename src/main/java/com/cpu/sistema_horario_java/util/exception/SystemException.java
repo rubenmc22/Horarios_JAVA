@@ -1,13 +1,26 @@
 package com.cpu.sistema_horario_java.util.exception;
 
+import java.text.FieldPosition;
+import java.text.MessageFormat;
+import java.util.Optional;
+
+import com.cpu.sistema_horario_java.config.CustomProperties;
 import com.cpu.sistema_horario_java.util.EntityType;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SystemException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
+
+    private static CustomProperties customProperties;
+
+    @Autowired
+    public SystemException(CustomProperties customProperties) {
+        SystemException.customProperties = customProperties;
+    }
 
     public static RuntimeException throwException(String messageTemplate, String... args) {
         return new RuntimeException(format(messageTemplate, args));
@@ -60,7 +73,12 @@ public class SystemException extends RuntimeException {
     }
 
     private static String format(String template, String... args) {
-        return String.format(template, (Object) args);
+
+        Optional<String> templateContent = Optional.ofNullable(customProperties.getConfigValue(template));
+        if (templateContent.isPresent()) {
+            return MessageFormat.format(templateContent.get(), (Object[]) args);
+        }
+        return String.format(template, (Object[]) args);
     }
 
 }
