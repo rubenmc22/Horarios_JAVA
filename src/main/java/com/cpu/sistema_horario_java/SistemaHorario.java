@@ -2,6 +2,8 @@ package com.cpu.sistema_horario_java;
 
 import com.cpu.sistema_horario_java.app.materia.Materia;
 import com.cpu.sistema_horario_java.app.materia.MateriaRepository;
+import com.cpu.sistema_horario_java.app.profesor.Profesor;
+import com.cpu.sistema_horario_java.app.profesor.ProfesorRepository;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,12 +21,21 @@ public class SistemaHorario {
 	}
 
 	@Bean
-	CommandLineRunner init(MateriaRepository matRepo) {
+	CommandLineRunner init(MateriaRepository matRepo, ProfesorRepository proRepo) {
 
 		return args -> {
+			log.info("************ DATA LOADING ************");
+
 			log.info("Preloading: " + matRepo.save(new Materia("Matemática")));
 			log.info("Preloading: " + matRepo.save(new Materia("Física")));
 			log.info("Preloading: " + matRepo.save(new Materia("Química")));
+
+			log.info("Preloading: " + proRepo.save(new Profesor("Carlos", "Guillén", "15325648")));
+			log.info("Preloading: " + proRepo.save(new Profesor("Horacio", "Beltrán", "6584231")));
+			log.info("Preloading: " + proRepo.save(new Profesor("Maria", "Chacín", "19652314")));
+
+			log.info("************ END OF DATA LOADING ************\n");
+
 		};
 	}
 
