@@ -22,10 +22,10 @@ public class Curso {
     @Column(name = "nombre", length = 50, nullable = false)
     private String nombre;
 
-    @Column(name = "descripcion", length = 100, nullable = false)
+    @Column(name = "descripcion", length = 100/*, nullable = false*/)
     private String descripcion;
 
-    @Column(name = "carga_academica", nullable = false)
+    @Column(name = "carga_academica"/*, nullable = false*/)
     private String cargaAcademica;
 
     @Column(name = "estatus")
