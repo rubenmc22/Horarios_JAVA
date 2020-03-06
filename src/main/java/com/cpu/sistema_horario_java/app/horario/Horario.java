@@ -1,10 +1,14 @@
-package com.cpu.sistema_horario_java.app.carga;
+package com.cpu.sistema_horario_java.app.horario;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.cpu.sistema_horario_java.app.util.Dia;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,18 +16,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "cargas_academicas")
-public class Carga {
+@Table(name = "horarios")
+public class Horario {
 
     @Id
     @GeneratedValue
     private Long id;
-
-    @Column(name = "nombre", length = 50, nullable = false)
-    private String nombre;
-
-    @Column(name = "descripcion", length = 100/* , nullable = false */)
-    private String descripcion;
 
     @Column(name = "profesor"/* , nullable = false */)
     private String profesor;
@@ -31,17 +29,14 @@ public class Carga {
     @Column(name = "materia"/* , nullable = false */)
     private String materia;
 
-    @Column(name = "curso"/* , nullable = false */)
-    private String curso;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "dia"/* , nullable = false */)
+    private Dia dia;
 
-    @Column(name = "horas"/* , nullable = false */)
-    private Integer horas;
+    @Column(name = "hora"/* , nullable = false */)
+    private String hora;
 
     @Column(name = "estatus")
     private Boolean estatus = true;
-
-    public Carga(String nombre) {
-        this.nombre = nombre;
-    }
 
 }
