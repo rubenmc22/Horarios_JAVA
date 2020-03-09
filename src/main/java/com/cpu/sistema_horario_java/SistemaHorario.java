@@ -18,12 +18,14 @@ import com.cpu.sistema_horario_java.app.periodo.Period;
 import com.cpu.sistema_horario_java.app.periodo.PeriodRepository;
 import com.cpu.sistema_horario_java.app.util.types.Dia;
 
+import com.cpu.sistema_horario_java.config.CustomProperties;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @Slf4j

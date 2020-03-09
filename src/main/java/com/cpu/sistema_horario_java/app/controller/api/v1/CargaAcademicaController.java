@@ -10,18 +10,12 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/v1/cargas_academicas")
 public class CargaAcademicaController {
 
@@ -32,41 +26,30 @@ public class CargaAcademicaController {
     private CargaAcademicaModelAssembler assembler;
 
     @GetMapping("/{id}")
-    public EntityModel<CargaAcademicaDTO> buscar(@PathVariable Long id) {
-
+    public CargaAcademicaDTO buscar(@PathVariable Long id) {
         CargaAcademicaDTO dto = service.buscar(id);
-
-        return assembler.toModel(dto);
+        return service.buscar(id);
     }
 
     @GetMapping
-    public CollectionModel<EntityModel<CargaAcademicaDTO>> listar() {
-
-        List<EntityModel<CargaAcademicaDTO>> resourceList = service.listar().stream().map(assembler::toModel)
-                .collect(Collectors.toList());
-
-        return new CollectionModel<>(resourceList,
-                linkTo(methodOn(CargaAcademicaController.class).listar()).withSelfRel());
+    public List <CargaAcademicaDTO> listar() {
+        return service.listar();
     }
 
     @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody CargaAcademicaDTO dto) {
-        EntityModel<CargaAcademicaDTO> resource = assembler.toModel(service.guardar(dto));
-
-        return ResponseEntity.created(resource.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(resource);
+    public CargaAcademicaDTO guardar(@RequestBody CargaAcademicaDTO dto) {
+           return service.guardar(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> replaceEmployee(@PathVariable Long id, @RequestBody CargaAcademicaDTO dto) {
-        EntityModel<CargaAcademicaDTO> resource = assembler.toModel(service.actualizar(id, dto));
+    public CargaAcademicaDTO replaceEmployee(@PathVariable Long id, @RequestBody CargaAcademicaDTO dto) {
 
-        return ResponseEntity.created(resource.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(resource);
+        return service.actualizar(id, dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         service.eliminar(id);
-
         return ResponseEntity.noContent().build();
     }
 
