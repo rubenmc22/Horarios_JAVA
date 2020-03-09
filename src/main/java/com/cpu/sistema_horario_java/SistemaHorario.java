@@ -123,7 +123,21 @@ public class SistemaHorario {
 			Period p13 = Period.builder().bloqueHorario(1).inicioPeriodo(_2_40_PM).finPeriodo(_3_25_PM).build();
 			Period p14 = Period.builder().bloqueHorario(1).inicioPeriodo(_3_25_PM).finPeriodo(_4_10_PM).build();
 
-			
+			log.info("Guardando: " + pRepo.save(p1));
+			log.info("Guardando: " + pRepo.save(p2));
+			log.info("Guardando: " + pRepo.save(p3));
+			log.info("Guardando: " + pRepo.save(p4));
+			log.info("Guardando: " + pRepo.save(p5));
+			log.info("Guardando: " + pRepo.save(p6));
+			log.info("Guardando: " + pRepo.save(p7));
+			log.info("Guardando: " + pRepo.save(p8));
+			log.info("Guardando: " + pRepo.save(p9));
+			log.info("Guardando: " + pRepo.save(p10));
+			log.info("Guardando: " + pRepo.save(p11));
+			log.info("Guardando: " + pRepo.save(p12));
+			log.info("Guardando: " + pRepo.save(p13));
+			log.info("Guardando: " + pRepo.save(p14));
+
 			log.info("************ PERIODOS CREADOS ************\n");
 
 			a1.addDocente(d1);
@@ -150,6 +164,7 @@ public class SistemaHorario {
 			ca3.addCurso(cu3A);
 			ca3.addCurso(cu3B);
 			log.info("Guardando: " + cRepo.save(ca3));
+			log.info("************ FIN DE CARGA DE DATOS ************\n");
 
 		};
 	}
