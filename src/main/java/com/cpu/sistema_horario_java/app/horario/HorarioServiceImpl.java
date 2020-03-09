@@ -1,5 +1,6 @@
 package com.cpu.sistema_horario_java.app.horario;
 
+import com.cpu.sistema_horario_java.app.util.types.Dia;
 import com.cpu.sistema_horario_java.app.util.types.EntityType;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
@@ -7,13 +8,24 @@ import static com.cpu.sistema_horario_java.app.util.types.EntityType.HORARIO;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPLICATE_ENTITY;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 
+import com.cpu.sistema_horario_java.app.asignatura.Asignatura;
 import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
+import com.cpu.sistema_horario_java.app.asignatura_carga.AsignaturaCargaAcademica;
+import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
+import com.cpu.sistema_horario_java.app.curso.Curso;
 import com.cpu.sistema_horario_java.app.curso.CursoRepository;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
+import com.cpu.sistema_horario_java.app.periodo.Period;
+import com.cpu.sistema_horario_java.app.periodo.PeriodRepository;
 import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +38,16 @@ public class HorarioServiceImpl implements HorarioService {
     HorarioRepository repo;
 
     @Autowired
+    CargaAcademicaRepository car;
+
+    @Autowired
     DocenteRepository dr;
 
     @Autowired
     AsignaturaRepository ar;
+
+    @Autowired
+    PeriodRepository pr;
 
     @Autowired
     CursoRepository cr;
@@ -38,8 +56,8 @@ public class HorarioServiceImpl implements HorarioService {
     HorarioMapper mapper;
 
     @Override
-    public HorarioDTO buscar(Long id) {
-        Optional<Horario> model = repo.findById(id);
+    public HorarioDTO buscar(final Long id) {
+        final Optional<Horario> model = repo.findById(id);
 
         if (model.isPresent()) {
             return mapper.toDTO(model.get());
@@ -53,8 +71,8 @@ public class HorarioServiceImpl implements HorarioService {
     }
 
     @Override
-    public HorarioDTO guardar(HorarioDTO dto) {
-        Optional<Horario> model = repo.findById(dto.getId());
+    public HorarioDTO guardar(final HorarioDTO dto) {
+        final Optional<Horario> model = repo.findById(dto.getId());
 
         if (!model.isPresent()) {
             return mapper.toDTO(repo.save(mapper.toModel(dto)));
@@ -64,7 +82,7 @@ public class HorarioServiceImpl implements HorarioService {
     }
 
     @Override
-    public HorarioDTO actualizar(Long id, HorarioDTO dto) {
+    public HorarioDTO actualizar(final Long id, final HorarioDTO dto) {
 
         return repo.findById(id).map(m -> {
             return mapper.toDTO(repo.save(mapper.toModel(dto, m)));
@@ -75,8 +93,8 @@ public class HorarioServiceImpl implements HorarioService {
     }
 
     @Override
-    public void eliminar(Long id) {
-        Optional<Horario> model = repo.findById(id);
+    public void eliminar(final Long id) {
+        final Optional<Horario> model = repo.findById(id);
 
         if (model.isPresent()) {
             repo.delete(model.get());
@@ -86,58 +104,44 @@ public class HorarioServiceImpl implements HorarioService {
 
     public HorarioDTO generar() {
 
-        // Horario horario = null;
-        // List<Curso> cursos = cr.findAll();
-        // List<Docente> docentes = dr.findAll();
-        // Docente doc = null;
-        // Asignatura asig = null;
-        // Dia dia = null;
-        // BloqueHorario bloque = null;
-        // Set<BloqueHorario> bloques = new HashSet<>();
-        // TipoBloqueHorario t = null;
-        // int i = 0;
-        // boolean primera = true;
+        Dia[] dias = Dia.values();
 
-        // while (i < Dia.values().length) {
-        // horario = new Horario();
-        // t = TipoBloqueHorario.CLASES;
-        // dia = Dia.values()[i];
+        List<Period> periodos = pr.findAll().stream().filter(Period::getEstatus).collect(Collectors.toList());
 
-        // if (primera) {
-        // primera = false;
-        // bloque = BloqueHorario.values()[i];
-        // bloques.add(bloque);
-        // t = TipoBloqueHorario.APERTURA;
-        // } else {
-        // List<Curso> cursosConclasesHoy = cursos.stream()
-        // .filter(curso ->
-        // curso.getDias().contains(Dia.values()[i])).collect(Collectors.toList());
+        List<Curso> cursos = cr.findAll();
 
-        // for (Curso curso : cursosConclasesHoy) {
-        // List<AsignaturaCargaAcademica> asignaturasParaEsteCurso =
-        // curso.getCargaAcademica()
-        // .getAsignaturas();
+        for (final Dia dia : dias) {
+            Horario horario = new Horario();
+            for (Curso curso : cursos) {
+                horario.setDia(dia);
+                horario.setPeriodo(getRandomPeriod(periodos));
+                horario.setPeriodo(getRandomPeriod(periodos));
+            }
 
-        // for (AsignaturaCargaAcademica detallePorAsignatura :
-        // asignaturasParaEsteCurso) {
-        // detallePorAsignatura.getAsignatura();
-        // detallePorAsignatura.getEstatus();
-        // }
-        // }
-
-        // }
-
-        // horario.setDia(dia);
-        // // horario.setBloqueHorario(bloques);
-        // // horario.setTipoBloqueHorario(t);
-        // horario.setDocente(doc);
-        // horario.setAsignatura(asig);
-
-        // repo.save(horario);
-
-        // }
+        }
 
         return null;
+    }
+
+    private Curso getRandomCurso(List<Curso> lista) {
+        int randomIndex = new Random().nextInt(lista.size());
+        Curso elemento = lista.get(randomIndex);
+        lista.remove(randomIndex);
+        return elemento;
+    }
+
+    private Period getRandomPeriod(List<Period> lista) {
+        int randomIndex = new Random().nextInt(lista.size());
+        Period elemento = lista.get(randomIndex);
+        lista.remove(randomIndex);
+        return elemento;
+    }
+
+    private Asignatura getRandomAsignatura(List<Asignatura> lista) {
+        int randomIndex = new Random().nextInt(lista.size());
+        Asignatura elemento = lista.get(randomIndex);
+        lista.remove(randomIndex);
+        return elemento;
     }
 
     /**
@@ -148,7 +152,8 @@ public class HorarioServiceImpl implements HorarioService {
      * @param args
      * @return
      */
-    static RuntimeException exception(EntityType entityType, ExceptionType exceptionType, String... args) {
+    static RuntimeException exception(final EntityType entityType, final ExceptionType exceptionType,
+            final String... args) {
         return SystemException.throwException(entityType, exceptionType, args);
     }
 }

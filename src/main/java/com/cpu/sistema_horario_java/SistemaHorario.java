@@ -108,20 +108,23 @@ public class SistemaHorario {
 			final LocalTime _3_25_PM = _2_40_PM.plusMinutes(45);
 			final LocalTime _4_10_PM = _3_25_PM.plusMinutes(45);
 
-			Period p1 = Period.builder().bloqueHorario(1).inicioPeriodo(_7_AM).finPeriodo(_7_15_AM).build();
-			Period p2 = Period.builder().bloqueHorario(1).inicioPeriodo(_7_15_AM).finPeriodo(_8_AM).build();
-			Period p3 = Period.builder().bloqueHorario(1).inicioPeriodo(_8_AM).finPeriodo(_8_45_AM).build();
-			Period p4 = Period.builder().bloqueHorario(1).inicioPeriodo(_8_45_AM).finPeriodo(_9_05_AM).build();
-			Period p5 = Period.builder().bloqueHorario(1).inicioPeriodo(_9_05_AM).finPeriodo(_9_50_AM).build();
-			Period p6 = Period.builder().bloqueHorario(1).inicioPeriodo(_9_50_AM).finPeriodo(_10_35_AM).build();
-			Period p7 = Period.builder().bloqueHorario(1).inicioPeriodo(_10_35_AM).finPeriodo(_11_20_AM).build();
-			Period p8 = Period.builder().bloqueHorario(1).inicioPeriodo(_11_20_AM).finPeriodo(_12_05_PM).build();
-			Period p9 = Period.builder().bloqueHorario(1).inicioPeriodo(_12_05_PM).finPeriodo(_12_25_PM).build();
-			Period p10 = Period.builder().bloqueHorario(1).inicioPeriodo(_12_25_PM).finPeriodo(_1_10_PM).build();
-			Period p11 = Period.builder().bloqueHorario(1).inicioPeriodo(_1_10_PM).finPeriodo(_1_55_PM).build();
-			Period p12 = Period.builder().bloqueHorario(1).inicioPeriodo(_1_55_PM).finPeriodo(_2_40_PM).build();
-			Period p13 = Period.builder().bloqueHorario(1).inicioPeriodo(_2_40_PM).finPeriodo(_3_25_PM).build();
-			Period p14 = Period.builder().bloqueHorario(1).inicioPeriodo(_3_25_PM).finPeriodo(_4_10_PM).build();
+			Period p1 = Period.builder().bloqueHorario(1).inicioPeriodo(_7_AM).finPeriodo(_7_15_AM).estatus(false)
+					.build();
+			Period p2 = Period.builder().bloqueHorario(2).inicioPeriodo(_7_15_AM).finPeriodo(_8_AM).build();
+			Period p3 = Period.builder().bloqueHorario(3).inicioPeriodo(_8_AM).finPeriodo(_8_45_AM).build();
+			Period p4 = Period.builder().bloqueHorario(4).inicioPeriodo(_8_45_AM).finPeriodo(_9_05_AM).estatus(false)
+					.build();
+			Period p5 = Period.builder().bloqueHorario(5).inicioPeriodo(_9_05_AM).finPeriodo(_9_50_AM).build();
+			Period p6 = Period.builder().bloqueHorario(6).inicioPeriodo(_9_50_AM).finPeriodo(_10_35_AM).build();
+			Period p7 = Period.builder().bloqueHorario(7).inicioPeriodo(_10_35_AM).finPeriodo(_11_20_AM).build();
+			Period p8 = Period.builder().bloqueHorario(8).inicioPeriodo(_11_20_AM).finPeriodo(_12_05_PM).build();
+			Period p9 = Period.builder().bloqueHorario(9).inicioPeriodo(_12_05_PM).finPeriodo(_12_25_PM).estatus(false)
+					.build();
+			Period p10 = Period.builder().bloqueHorario(10).inicioPeriodo(_12_25_PM).finPeriodo(_1_10_PM).build();
+			Period p11 = Period.builder().bloqueHorario(11).inicioPeriodo(_1_10_PM).finPeriodo(_1_55_PM).build();
+			Period p12 = Period.builder().bloqueHorario(12).inicioPeriodo(_1_55_PM).finPeriodo(_2_40_PM).build();
+			Period p13 = Period.builder().bloqueHorario(13).inicioPeriodo(_2_40_PM).finPeriodo(_3_25_PM).build();
+			Period p14 = Period.builder().bloqueHorario(14).inicioPeriodo(_3_25_PM).finPeriodo(_4_10_PM).build();
 
 			log.info("Guardando: " + pRepo.save(p1));
 			log.info("Guardando: " + pRepo.save(p2));
