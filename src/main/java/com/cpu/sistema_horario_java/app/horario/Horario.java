@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.cpu.sistema_horario_java.app.util.Dia;
+import com.cpu.sistema_horario_java.app.util.types.Dia;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

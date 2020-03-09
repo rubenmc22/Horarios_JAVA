@@ -1,9 +1,17 @@
 package com.cpu.sistema_horario_java.app.curso;
 
+import java.util.stream.Collectors;
+
+import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
+import com.cpu.sistema_horario_java.app.util.types.Dia;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CursoMapper {
+    @Autowired
+    CargaAcademicaRepository car;
 
     public Curso toModel(CursoDTO dto) {
         Curso model = new Curso();
@@ -11,7 +19,8 @@ public class CursoMapper {
         model.setId(dto.getId());
         model.setNombre(dto.getNombre());
         model.setDescripcion(dto.getDescripcion());
-        model.setCargaAcademica(dto.getCargaAcademica());
+        model.setDias(dto.getDias().stream().map(d -> Dia.values()[d]).collect(Collectors.toSet()));
+        model.setCargaAcademica(car.getOne(dto.getCargaAcademica()));
         model.setEstatus(dto.getEstatus());
 
         return model;
@@ -21,7 +30,8 @@ public class CursoMapper {
 
         model.setNombre(dto.getNombre());
         model.setDescripcion(dto.getDescripcion());
-        model.setCargaAcademica(dto.getCargaAcademica());
+        model.setDias(dto.getDias().stream().map(d -> Dia.values()[d]).collect(Collectors.toSet()));
+        model.setCargaAcademica(car.getOne(dto.getCargaAcademica()));
         model.setEstatus(dto.getEstatus());
 
         return model;
@@ -33,7 +43,8 @@ public class CursoMapper {
         dto.setId(model.getId());
         dto.setNombre(model.getNombre());
         dto.setDescripcion(model.getDescripcion());
-        dto.setCargaAcademica(model.getCargaAcademica());
+        dto.setDias(model.getDias().stream().map(d -> d.getNumeroDia()).collect(Collectors.toSet()));
+        dto.setCargaAcademica(model.getCargaAcademica() != null ? model.getCargaAcademica().getId() : null);
         dto.setEstatus(model.getEstatus());
 
         return dto;
@@ -44,7 +55,8 @@ public class CursoMapper {
         dto.setId(model.getId());
         dto.setNombre(model.getNombre());
         dto.setDescripcion(model.getDescripcion());
-        dto.setCargaAcademica(model.getCargaAcademica());
+        dto.setDias(model.getDias().stream().map(d -> d.getNumeroDia()).collect(Collectors.toSet()));
+        dto.setCargaAcademica(model.getCargaAcademica() != null ? model.getCargaAcademica().getId() : null);
         dto.setEstatus(model.getEstatus());
 
         return dto;

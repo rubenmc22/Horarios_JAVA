@@ -1,19 +1,20 @@
 package com.cpu.sistema_horario_java.app.horario;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.cpu.sistema_horario_java.app.util.types.EntityType;
+import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
-import java.util.Optional;
+import static com.cpu.sistema_horario_java.app.util.types.EntityType.HORARIO;
+import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPLICATE_ENTITY;
+import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.cpu.sistema_horario_java.util.EntityType;
-import com.cpu.sistema_horario_java.util.exception.ExceptionType;
-import com.cpu.sistema_horario_java.util.exception.SystemException;
+import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 
-import static com.cpu.sistema_horario_java.util.EntityType.HORARIO;
-import static com.cpu.sistema_horario_java.util.exception.ExceptionType.DUPLICATE_ENTITY;
-import static com.cpu.sistema_horario_java.util.exception.ExceptionType.ENTITY_NOT_FOUND;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class HorarioServiceImpl implements HorarioService {

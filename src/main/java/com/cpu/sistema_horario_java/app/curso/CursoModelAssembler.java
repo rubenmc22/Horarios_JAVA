@@ -1,8 +1,9 @@
 package com.cpu.sistema_horario_java.app.curso;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import com.cpu.sistema_horario_java.app.controller.v1.api.CursoController;
+import com.cpu.sistema_horario_java.app.controller.api.v1.CursoController;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;

@@ -1,6 +1,6 @@
 package com.cpu.sistema_horario_java.app.horario;
 
-import com.cpu.sistema_horario_java.app.util.Dia;
+import com.cpu.sistema_horario_java.app.util.types.Dia;
 
 import lombok.Data;
 

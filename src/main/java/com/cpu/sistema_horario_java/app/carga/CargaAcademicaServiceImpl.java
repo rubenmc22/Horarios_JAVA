@@ -1,57 +1,57 @@
-package com.cpu.sistema_horario_java.app.curso;
+package com.cpu.sistema_horario_java.app.carga;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.cpu.sistema_horario_java.app.util.types.EntityType;
 import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
-import static com.cpu.sistema_horario_java.app.util.types.EntityType.CURSO;
+import static com.cpu.sistema_horario_java.app.util.types.EntityType.CARGA_ACADEMICA;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPLICATE_ENTITY;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 @Service
-public class CursoServiceImpl implements CursoService {
+public class CargaAcademicaServiceImpl implements CargaAcademicaService {
 
     @Autowired
-    CursoRepository repo;
+    CargaAcademicaRepository repo;
 
     @Autowired
-    CursoMapper mapper;
+    CargaAcademicaMapper mapper;
 
     @Override
-    public CursoDTO buscar(Long id) {
-        Optional<Curso> model = repo.findById(id);
+    public CargaAcademicaDTO buscar(Long id) {
+        Optional<CargaAcademica> model = repo.findById(id);
 
         if (model.isPresent()) {
             return mapper.toDTO(model.get());
         }
-        throw exception(CURSO, ENTITY_NOT_FOUND, id.toString());
+        throw exception(CARGA_ACADEMICA, ENTITY_NOT_FOUND, id.toString());
     }
 
     @Override
-    public List<CursoDTO> listar() {
+    public List<CargaAcademicaDTO> listar() {
         return repo.findAll().stream().map(model -> mapper.toDTO(model)).collect(Collectors.toList());
     }
 
     @Override
-    public CursoDTO guardar(CursoDTO dto) {
-        Optional<CursoDTO> model = repo.findByNombre(dto.getNombre());
+    public CargaAcademicaDTO guardar(CargaAcademicaDTO dto) {
+        Optional<CargaAcademica> model = dto.getId().equals(null) ? Optional.empty() : repo.findById(dto.getId());
 
         if (!model.isPresent()) {
             return mapper.toDTO(repo.save(mapper.toModel(dto)));
         }
 
-        throw exception(CURSO, DUPLICATE_ENTITY, dto.getNombre());
+        throw exception(CARGA_ACADEMICA, DUPLICATE_ENTITY, dto.toString());
     }
 
     @Override
-    public CursoDTO actualizar(Long id, CursoDTO dto) {
+    public CargaAcademicaDTO actualizar(Long id, CargaAcademicaDTO dto) {
 
         return repo.findById(id).map(m -> {
             return mapper.toDTO(repo.save(mapper.toModel(dto, m)));
@@ -63,12 +63,12 @@ public class CursoServiceImpl implements CursoService {
 
     @Override
     public void eliminar(Long id) {
-        Optional<Curso> model = repo.findById(id);
+        Optional<CargaAcademica> model = repo.findById(id);
 
         if (model.isPresent()) {
             repo.delete(model.get());
         }
-        throw exception(CURSO, ENTITY_NOT_FOUND, id.toString());
+        throw exception(CARGA_ACADEMICA, ENTITY_NOT_FOUND, id.toString());
     }
 
     /**
