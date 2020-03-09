@@ -92,7 +92,7 @@ public class SistemaHorario {
 			log.info("************ CURSOS CREADOS ************\n");
 
 			log.info("************ CREANDO PERIODOS ************");
-			final LocalTime _7_AM = LocalTime.now().withHour(7).withMinute(0);
+			final LocalTime _7_AM = LocalTime.now().withHour(7).withMinute(0).withSecond(0).withNano(0);
 			final LocalTime _7_15_AM = _7_AM.plusMinutes(15);
 			final LocalTime _8_AM = _7_15_AM.plusMinutes(45);
 			final LocalTime _8_45_AM = _8_AM.plusMinutes(45);
