@@ -1,20 +1,13 @@
 package com.cpu.sistema_horario_java.app.controller.api.v1;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.cpu.sistema_horario_java.app.curso.CursoDTO;
-import com.cpu.sistema_horario_java.app.curso.CursoModelAssembler;
 import com.cpu.sistema_horario_java.app.curso.CursoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -24,8 +17,6 @@ public class CursoController {
     @Autowired
     private CursoService service;
 
-    @Autowired
-    private CursoModelAssembler assembler;
 
     @GetMapping("/{id}")
     public CursoDTO buscar(@PathVariable Long id) {
