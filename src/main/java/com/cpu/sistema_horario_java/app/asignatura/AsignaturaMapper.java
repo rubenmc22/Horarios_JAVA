@@ -13,67 +13,71 @@ import org.springframework.stereotype.Component;
 @Component
 public class AsignaturaMapper {
 
-    @Autowired
-    private DocenteRepository dr;
+        @Autowired
+        private DocenteRepository dr;
 
-    @Autowired
-    private AsignaturaRepository ar;
+        @Autowired
+        private AsignaturaRepository ar;
 
-    @Autowired
-    private AsignaturaCargaAcademicaRepository acar;
+        @Autowired
+        private AsignaturaCargaAcademicaRepository acar;
 
-    public Asignatura toModel(AsignaturaDTO dto) {
-        Asignatura model = new Asignatura();
+        public Asignatura toModel(AsignaturaDTO dto) {
+                Asignatura model = new Asignatura();
 
-        model.setId(dto.getId());
-        model.setNombre(dto.getNombre());
-        model.setDescripcion(dto.getDescripcion());
-        model.setDocentes(dto.getDocentes().stream().map(idDocente -> dr.findById(idDocente))
-                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList()));
-        model.setCargas(dto.getCargas().stream().map(idCarga -> acar.findById(idCarga)).filter(Optional::isPresent)
-                .map(Optional::get).collect(Collectors.toList()));
-        model.setEstatus(dto.getEstatus());
+                model.setId(dto.getId());
+                model.setNombre(dto.getNombre());
+                model.setDescripcion(dto.getDescripcion());
+                if (dto.getDocentes().size() > 0) {
+                        model.setDocentes(dto.getDocentes().stream().map(idDocente -> dr.findById(idDocente))
+                                        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList()));
+                }
+                model.setCargas(dto.getCargas().stream().map(idCarga -> acar.findById(idCarga))
+                                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList()));
+                model.setEstatus(dto.getEstatus());
 
-        return model;
-    }
+                return model;
+        }
 
-    public Asignatura toModel(AsignaturaDTO dto, Asignatura model) {
+        public Asignatura toModel(AsignaturaDTO dto, Asignatura model) {
 
-        model.setNombre(dto.getNombre());
-        model.setDescripcion(dto.getDescripcion());
-        model.setDocentes(dto.getDocentes().stream().map(idDocente -> dr.findById(idDocente))
-                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList()));
-        model.setCargas(dto.getCargas().stream().map(idCarga -> acar.findById(idCarga)).filter(Optional::isPresent)
-                .map(Optional::get).collect(Collectors.toList()));
-        model.setEstatus(dto.getEstatus());
+                model.setNombre(dto.getNombre());
+                model.setDescripcion(dto.getDescripcion());
+                if (dto.getDocentes().size() > 0) {
+                        model.setDocentes(dto.getDocentes().stream().map(idDocente -> dr.findById(idDocente))
+                                        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList()));
+                }
+                model.setCargas(dto.getCargas().stream().map(idCarga -> acar.findById(idCarga))
+                                .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList()));
+                model.setEstatus(dto.getEstatus());
 
-        return model;
-    }
+                return model;
+        }
 
-    public AsignaturaDTO toDTO(Asignatura model) {
-        AsignaturaDTO dto = new AsignaturaDTO();
+        public AsignaturaDTO toDTO(Asignatura model) {
+                AsignaturaDTO dto = new AsignaturaDTO();
 
-        dto.setId(model.getId());
-        dto.setNombre(model.getNombre());
-        dto.setDescripcion(model.getDescripcion());
-        dto.setDocentes(model.getDocentes().stream().map(Docente::getId).collect(Collectors.toList()));
-        dto.setCargas(acar.findByAsignatura(ar.getOne(model.getId())).stream().map(a -> a.getCargaAcademica().getId())
-                .collect(Collectors.toList()));
-        dto.setEstatus(model.getEstatus());
+                dto.setId(model.getId());
+                dto.setNombre(model.getNombre());
+                dto.setDescripcion(model.getDescripcion());
+                dto.setDocentes(model.getDocentes().stream().map(Docente::getId).collect(Collectors.toList()));
+                dto.setCargas(acar.findByAsignatura(ar.getOne(model.getId())).stream()
+                                .map(a -> a.getCargaAcademica().getId()).collect(Collectors.toList()));
+                dto.setEstatus(model.getEstatus());
 
-        return dto;
-    }
+                return dto;
+        }
 
-    public AsignaturaDTO toDTO(Asignatura model, AsignaturaDTO dto) {
+        public AsignaturaDTO toDTO(Asignatura model, AsignaturaDTO dto) {
 
-        dto.setId(model.getId());
-        dto.setNombre(model.getNombre());
-        dto.setDescripcion(model.getDescripcion());
-        dto.setDocentes(model.getDocentes().stream().map(Docente::getId).collect(Collectors.toList()));
-        dto.setCargas(acar.findByAsignatura(ar.getOne(model.getId())).stream().map(a -> a.getCargaAcademica().getId())
-                .collect(Collectors.toList()));
-        dto.setEstatus(model.getEstatus());
+                dto.setId(model.getId());
+                dto.setNombre(model.getNombre());
+                dto.setDescripcion(model.getDescripcion());
+                dto.setDocentes(model.getDocentes().stream().map(Docente::getId).collect(Collectors.toList()));
+                dto.setCargas(acar.findByAsignatura(ar.getOne(model.getId())).stream()
+                                .map(a -> a.getCargaAcademica().getId()).collect(Collectors.toList()));
+                dto.setEstatus(model.getEstatus());
 
-        return dto;
-    }
+                return dto;
+        }
 }
