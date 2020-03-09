@@ -28,40 +28,29 @@ public class AsignaturaController {
     private AsignaturaModelAssembler assembler;
 
     @GetMapping("/{id}")
-    public EntityModel<AsignaturaDTO> buscar(@PathVariable Long id) {
-
+    public AsignaturaDTO buscar(@PathVariable Long id) {
         AsignaturaDTO Asignatura = service.buscar(id);
-
-        return assembler.toModel(Asignatura);
+        return Asignatura;
     }
 
     @GetMapping
-    public CollectionModel<EntityModel<AsignaturaDTO>> listar() {
-
-        List<EntityModel<AsignaturaDTO>> Asignaturas = service.listar().stream().map(assembler::toModel)
-                .collect(Collectors.toList());
-
-        return new CollectionModel<>(Asignaturas, linkTo(methodOn(AsignaturaController.class).listar()).withSelfRel());
+    public List <AsignaturaDTO> listar() {
+        return service.listar();
     }
 
     @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody AsignaturaDTO dto) {
-        EntityModel<AsignaturaDTO> Asignatura = assembler.toModel(service.guardar(dto));
-
-        return ResponseEntity.created(Asignatura.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(Asignatura);
+    public AsignaturaDTO guardar(@RequestBody AsignaturaDTO dto) {
+        return service.guardar(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> reemplazar(@PathVariable Long id, @RequestBody AsignaturaDTO dto) {
-        EntityModel<AsignaturaDTO> Asignatura = assembler.toModel(service.reemplazar(id, dto));
-
-        return ResponseEntity.created(Asignatura.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(Asignatura);
+    public AsignaturaDTO reemplazar(@PathVariable Long id, @RequestBody AsignaturaDTO dto) {
+        return service.reemplazar(id, dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable Long id) {
         service.eliminar(id);
-
         return ResponseEntity.noContent().build();
     }
 

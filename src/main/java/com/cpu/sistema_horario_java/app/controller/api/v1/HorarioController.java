@@ -28,40 +28,28 @@ public class HorarioController {
     private HorarioModelAssembler assembler;
 
     @GetMapping("/{id}")
-    public EntityModel<HorarioDTO> buscar(@PathVariable Long id) {
-
-        HorarioDTO dto = service.buscar(id);
-
-        return assembler.toModel(dto);
+    public HorarioDTO buscar(@PathVariable Long id) {
+        return service.buscar(id);
     }
 
     @GetMapping
-    public CollectionModel<EntityModel<HorarioDTO>> listar() {
-
-        List<EntityModel<HorarioDTO>> resourceList = service.listar().stream().map(assembler::toModel)
-                .collect(Collectors.toList());
-
-        return new CollectionModel<>(resourceList, linkTo(methodOn(HorarioController.class).listar()).withSelfRel());
+    public List<HorarioDTO> listar() {
+        return service.listar();
     }
 
     @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody HorarioDTO dto) {
-        EntityModel<HorarioDTO> resource = assembler.toModel(service.guardar(dto));
-
-        return ResponseEntity.created(resource.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(resource);
+    public HorarioDTO guardar(@RequestBody HorarioDTO dto) {
+         return service.guardar(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> replaceEmployee(@PathVariable Long id, @RequestBody HorarioDTO dto) {
-        EntityModel<HorarioDTO> resource = assembler.toModel(service.actualizar(id, dto));
-
-        return ResponseEntity.created(resource.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(resource);
+    public HorarioDTO replaceEmployee(@PathVariable Long id, @RequestBody HorarioDTO dto) {
+        return service.actualizar(id, dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         service.eliminar(id);
-
         return ResponseEntity.noContent().build();
     }
 

@@ -28,40 +28,28 @@ public class DocenteController {
     private DocenteModelAssembler assembler;
 
     @GetMapping("/{id}")
-    public EntityModel<DocenteDTO> buscar(@PathVariable Long id) {
-
-        DocenteDTO dto = service.buscar(id);
-
-        return assembler.toModel(dto);
+    public DocenteDTO buscar(@PathVariable Long id) {
+        return service.buscar(id);
     }
 
     @GetMapping
-    public CollectionModel<EntityModel<DocenteDTO>> listar() {
-
-        List<EntityModel<DocenteDTO>> resourceList = service.listar().stream().map(assembler::toModel)
-                .collect(Collectors.toList());
-
-        return new CollectionModel<>(resourceList, linkTo(methodOn(DocenteController.class).listar()).withSelfRel());
+    public List<DocenteDTO> listar() {
+        return service.listar();
     }
 
     @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody DocenteDTO dto) {
-        EntityModel<DocenteDTO> resource = assembler.toModel(service.guardar(dto));
-
-        return ResponseEntity.created(resource.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(resource);
+    public DocenteDTO guardar(@RequestBody DocenteDTO dto) {
+        return service.guardar(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> replaceEmployee(@PathVariable Long id, @RequestBody DocenteDTO dto) {
-        EntityModel<DocenteDTO> resource = assembler.toModel(service.actualizar(id, dto));
-
-        return ResponseEntity.created(resource.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(resource);
+    public DocenteDTO replaceEmployee(@PathVariable Long id, @RequestBody DocenteDTO dto) {
+        return service.actualizar(id, dto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         service.eliminar(id);
-
         return ResponseEntity.noContent().build();
     }
 
