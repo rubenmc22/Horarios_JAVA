@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
+import com.cpu.sistema_horario_java.app.curso.CursoRepository;
+import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
 import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,15 @@ public class HorarioServiceImpl implements HorarioService {
 
     @Autowired
     HorarioRepository repo;
+
+    @Autowired
+    DocenteRepository dr;
+
+    @Autowired
+    AsignaturaRepository ar;
+
+    @Autowired
+    CursoRepository cr;
 
     @Autowired
     HorarioMapper mapper;
@@ -70,6 +82,11 @@ public class HorarioServiceImpl implements HorarioService {
             repo.delete(model.get());
         }
         throw exception(HORARIO, ENTITY_NOT_FOUND, id.toString());
+    }
+
+    public HorarioDTO generar() {
+
+        return null;
     }
 
     /**
