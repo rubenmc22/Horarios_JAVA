@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.cpu.sistema_horario_java.app.asignatura.Asignatura;
 import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
+import com.cpu.sistema_horario_java.app.asignatura_carga.AsignaturaCargaAcademicaRepository;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademica;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
 import com.cpu.sistema_horario_java.app.curso.Curso;
@@ -30,8 +31,8 @@ public class SistemaHorario {
 	}
 
 	@Bean
-	CommandLineRunner init(AsignaturaRepository aRepo, CargaAcademicaRepository cRepo, DocenteRepository dRepo,
-			CursoRepository cuRepo) {
+	CommandLineRunner init(AsignaturaRepository aRepo, CargaAcademicaRepository cRepo,
+			AsignaturaCargaAcademicaRepository acaRepo, DocenteRepository dRepo, CursoRepository cuRepo) {
 
 		return args -> {
 			log.info("************ DATA LOADING ************\n");
@@ -97,9 +98,14 @@ public class SistemaHorario {
 			log.info("Guardando: " + aRepo.save(a3));
 
 			ca1.addCurso(cu1);
+			ca1.addAsignatura(a1);
+			ca1.addAsignatura(a2);
+			ca1.addAsignatura(a3);
 			log.info("Guardando: " + cRepo.save(ca1));
 
 			ca2.addCurso(cu2);
+			ca2.addAsignatura(a2);
+			ca2.addAsignatura(a3);
 			log.info("Guardando: " + cRepo.save(ca2));
 
 			ca3.addCurso(cu3A);

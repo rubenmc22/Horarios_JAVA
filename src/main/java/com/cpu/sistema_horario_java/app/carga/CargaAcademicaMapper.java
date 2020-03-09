@@ -2,8 +2,6 @@ package com.cpu.sistema_horario_java.app.carga;
 
 import java.util.stream.Collectors;
 
-import com.cpu.sistema_horario_java.app.asignatura.*;
-import com.cpu.sistema_horario_java.app.asignatura_carga.AsignaturaCargaAcademica;
 import com.cpu.sistema_horario_java.app.asignatura_carga.AsignaturaCargaAcademicaRepository;
 import com.cpu.sistema_horario_java.app.curso.Curso;
 import com.cpu.sistema_horario_java.app.curso.CursoRepository;
@@ -15,13 +13,13 @@ import org.springframework.stereotype.Component;
 public class CargaAcademicaMapper {
 
     @Autowired
-    CursoRepository cr;
+    private CursoRepository cr;
 
     @Autowired
-    AsignaturaRepository mr;
+    private CargaAcademicaRepository car;
 
     @Autowired
-    AsignaturaCargaAcademicaRepository acar;
+    private AsignaturaCargaAcademicaRepository acar;
 
     public CargaAcademica toModel(CargaAcademicaDTO dto) {
         CargaAcademica model = new CargaAcademica();
@@ -48,8 +46,8 @@ public class CargaAcademicaMapper {
 
         dto.setId(model.getId());
         dto.setNombre(model.getNombre());
-        dto.setAsignaturas(
-                model.getAsignaturas().stream().map(AsignaturaCargaAcademica::getId).collect(Collectors.toList()));
+        dto.setAsignaturas(acar.findByCargaAcademica(car.getOne(model.getId())).stream()
+                .map(a -> a.getAsignatura().getId()).collect(Collectors.toList()));
         dto.setCursos(model.getCursos().stream().map(Curso::getId).collect(Collectors.toList()));
         dto.setEstatus(model.getEstatus());
 
@@ -60,8 +58,8 @@ public class CargaAcademicaMapper {
 
         dto.setId(model.getId());
         dto.setNombre(model.getNombre());
-        dto.setAsignaturas(
-                model.getAsignaturas().stream().map(AsignaturaCargaAcademica::getId).collect(Collectors.toList()));
+        dto.setAsignaturas(acar.findByCargaAcademica(car.getOne(model.getId())).stream()
+                .map(a -> a.getAsignatura().getId()).collect(Collectors.toList()));
         dto.setCursos(model.getCursos().stream().map(Curso::getId).collect(Collectors.toList()));
         dto.setEstatus(model.getEstatus());
 

@@ -4,17 +4,22 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.cpu.sistema_horario_java.app.docente.Docente;
-import com.cpu.sistema_horario_java.app.asignatura_carga.AsignaturaCargaAcademica;
 import com.cpu.sistema_horario_java.app.asignatura_carga.AsignaturaCargaAcademicaRepository;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AsignaturaMapper {
 
+    @Autowired
     private DocenteRepository dr;
 
+    @Autowired
+    private AsignaturaRepository ar;
+
+    @Autowired
     private AsignaturaCargaAcademicaRepository acar;
 
     public Asignatura toModel(AsignaturaDTO dto) {
@@ -52,7 +57,8 @@ public class AsignaturaMapper {
         dto.setNombre(model.getNombre());
         dto.setDescripcion(model.getDescripcion());
         dto.setDocentes(model.getDocentes().stream().map(Docente::getId).collect(Collectors.toList()));
-        dto.setCargas(model.getCargas().stream().map(AsignaturaCargaAcademica::getId).collect(Collectors.toList()));
+        dto.setCargas(acar.findByAsignatura(ar.getOne(model.getId())).stream().map(a -> a.getCargaAcademica().getId())
+                .collect(Collectors.toList()));
         dto.setEstatus(model.getEstatus());
 
         return dto;
@@ -64,7 +70,8 @@ public class AsignaturaMapper {
         dto.setNombre(model.getNombre());
         dto.setDescripcion(model.getDescripcion());
         dto.setDocentes(model.getDocentes().stream().map(Docente::getId).collect(Collectors.toList()));
-        dto.setCargas(model.getCargas().stream().map(AsignaturaCargaAcademica::getId).collect(Collectors.toList()));
+        dto.setCargas(acar.findByAsignatura(ar.getOne(model.getId())).stream().map(a -> a.getCargaAcademica().getId())
+                .collect(Collectors.toList()));
         dto.setEstatus(model.getEstatus());
 
         return dto;
