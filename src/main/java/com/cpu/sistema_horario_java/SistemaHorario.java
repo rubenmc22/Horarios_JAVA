@@ -1,5 +1,6 @@
 package com.cpu.sistema_horario_java;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,6 +14,8 @@ import com.cpu.sistema_horario_java.app.curso.Curso;
 import com.cpu.sistema_horario_java.app.curso.CursoRepository;
 import com.cpu.sistema_horario_java.app.docente.Docente;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
+import com.cpu.sistema_horario_java.app.periodo.Period;
+import com.cpu.sistema_horario_java.app.periodo.PeriodRepository;
 import com.cpu.sistema_horario_java.app.util.types.Dia;
 
 import org.springframework.boot.CommandLineRunner;
@@ -32,7 +35,8 @@ public class SistemaHorario {
 
 	@Bean
 	CommandLineRunner init(AsignaturaRepository aRepo, CargaAcademicaRepository cRepo,
-			AsignaturaCargaAcademicaRepository acaRepo, DocenteRepository dRepo, CursoRepository cuRepo) {
+			AsignaturaCargaAcademicaRepository acaRepo, DocenteRepository dRepo, CursoRepository cuRepo,
+			PeriodRepository pRepo) {
 
 		return args -> {
 			log.info("************ DATA LOADING ************\n");
@@ -86,6 +90,41 @@ public class SistemaHorario {
 			Curso cu6 = Curso.builder().nombre("6° año").dias(dias).build();
 			log.info("Guardando: " + cuRepo.save(cu6));
 			log.info("************ CURSOS CREADOS ************\n");
+
+			log.info("************ CREANDO PERIODOS ************");
+			final LocalTime _7_AM = LocalTime.now().withHour(7).withMinute(0);
+			final LocalTime _7_15_AM = _7_AM.plusMinutes(15);
+			final LocalTime _8_AM = _7_15_AM.plusMinutes(45);
+			final LocalTime _8_45_AM = _8_AM.plusMinutes(45);
+			final LocalTime _9_05_AM = _8_45_AM.plusMinutes(20);
+			final LocalTime _9_50_AM = _9_05_AM.plusMinutes(45);
+			final LocalTime _10_35_AM = _9_50_AM.plusMinutes(45);
+			final LocalTime _11_20_AM = _10_35_AM.plusMinutes(45);
+			final LocalTime _12_05_PM = _11_20_AM.plusMinutes(45);
+			final LocalTime _12_25_PM = _12_05_PM.plusMinutes(20);
+			final LocalTime _1_10_PM = _12_25_PM.plusMinutes(45);
+			final LocalTime _1_55_PM = _1_10_PM.plusMinutes(45);
+			final LocalTime _2_40_PM = _1_55_PM.plusMinutes(45);
+			final LocalTime _3_25_PM = _2_40_PM.plusMinutes(45);
+			final LocalTime _4_10_PM = _3_25_PM.plusMinutes(45);
+
+			Period p1 = Period.builder().bloqueHorario(1).inicioPeriodo(_7_AM).finPeriodo(_7_15_AM).build();
+			Period p2 = Period.builder().bloqueHorario(1).inicioPeriodo(_7_15_AM).finPeriodo(_8_AM).build();
+			Period p3 = Period.builder().bloqueHorario(1).inicioPeriodo(_8_AM).finPeriodo(_8_45_AM).build();
+			Period p4 = Period.builder().bloqueHorario(1).inicioPeriodo(_8_45_AM).finPeriodo(_9_05_AM).build();
+			Period p5 = Period.builder().bloqueHorario(1).inicioPeriodo(_9_05_AM).finPeriodo(_9_50_AM).build();
+			Period p6 = Period.builder().bloqueHorario(1).inicioPeriodo(_9_50_AM).finPeriodo(_10_35_AM).build();
+			Period p7 = Period.builder().bloqueHorario(1).inicioPeriodo(_10_35_AM).finPeriodo(_11_20_AM).build();
+			Period p8 = Period.builder().bloqueHorario(1).inicioPeriodo(_11_20_AM).finPeriodo(_12_05_PM).build();
+			Period p9 = Period.builder().bloqueHorario(1).inicioPeriodo(_12_05_PM).finPeriodo(_12_25_PM).build();
+			Period p10 = Period.builder().bloqueHorario(1).inicioPeriodo(_12_25_PM).finPeriodo(_1_10_PM).build();
+			Period p11 = Period.builder().bloqueHorario(1).inicioPeriodo(_1_10_PM).finPeriodo(_1_55_PM).build();
+			Period p12 = Period.builder().bloqueHorario(1).inicioPeriodo(_1_55_PM).finPeriodo(_2_40_PM).build();
+			Period p13 = Period.builder().bloqueHorario(1).inicioPeriodo(_2_40_PM).finPeriodo(_3_25_PM).build();
+			Period p14 = Period.builder().bloqueHorario(1).inicioPeriodo(_3_25_PM).finPeriodo(_4_10_PM).build();
+
+			
+			log.info("************ PERIODOS CREADOS ************\n");
 
 			a1.addDocente(d1);
 			a1.addDocente(d2);

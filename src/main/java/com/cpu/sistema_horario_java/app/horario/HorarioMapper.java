@@ -1,13 +1,9 @@
 package com.cpu.sistema_horario_java.app.horario;
 
-import java.util.stream.Collectors;
-
 import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
 import com.cpu.sistema_horario_java.app.curso.CursoRepository;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
-import com.cpu.sistema_horario_java.app.util.types.BloqueHorario;
 import com.cpu.sistema_horario_java.app.util.types.Dia;
-import com.cpu.sistema_horario_java.app.util.types.TipoBloqueHorario;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,8 +26,8 @@ public class HorarioMapper {
         model.setAsignatura(ar.getOne(dto.getAsignatura()));
         model.setCurso(cr.getOne(dto.getCurso()));
         model.setDia(Dia.values()[dto.getDia()]);
-        model.setBloqueHorario(dto.getBloqueHorario().stream().map(BloqueHorario::valueOf).collect(Collectors.toSet()));
-        model.setTipoBloqueHorario(TipoBloqueHorario.valueOf(dto.getTipoBloqueHorario()));
+        // model.setBloqueHorario(dto.getBloqueHorario().stream().map(BloqueHorario::valueOf).collect(Collectors.toSet()));
+        // model.setTipoBloqueHorario(TipoBloqueHorario.valueOf(dto.getTipoBloqueHorario()));
         model.setEstatus(dto.getEstatus());
 
         return model;
@@ -43,8 +39,8 @@ public class HorarioMapper {
         model.setAsignatura(ar.getOne(dto.getAsignatura()));
         model.setCurso(cr.getOne(dto.getCurso()));
         model.setDia(Dia.values()[dto.getDia()]);
-        model.setBloqueHorario(dto.getBloqueHorario().stream().map(BloqueHorario::valueOf).collect(Collectors.toSet()));
-        model.setTipoBloqueHorario(TipoBloqueHorario.valueOf(dto.getTipoBloqueHorario()));
+        // model.setBloqueHorario(dto.getBloqueHorario().stream().map(BloqueHorario::valueOf).collect(Collectors.toSet()));
+        // model.setTipoBloqueHorario(TipoBloqueHorario.valueOf(dto.getTipoBloqueHorario()));
         model.setEstatus(dto.getEstatus());
 
         return model;
@@ -58,9 +54,9 @@ public class HorarioMapper {
         dto.setAsignatura(model.getAsignatura().getId());
         dto.setCurso(model.getCurso().getId());
         dto.setDia(model.getDia().getNumeroDia());
-        dto.setBloqueHorario(
-                model.getBloqueHorario().stream().map(BloqueHorario::getNombreBloque).collect(Collectors.toSet()));
-        dto.setTipoBloqueHorario(model.getTipoBloqueHorario().toString());
+        // dto.setBloqueHorario(
+        // model.getBloqueHorario().stream().map(BloqueHorario::getNombreBloque).collect(Collectors.toSet()));
+        // dto.setTipoBloqueHorario(model.getTipoBloqueHorario().toString());
         // dto.setDuracion(model.);
         dto.setEstatus(model.getEstatus());
 
@@ -74,9 +70,9 @@ public class HorarioMapper {
         dto.setAsignatura(model.getAsignatura().getId());
         dto.setCurso(model.getCurso().getId());
         dto.setDia(model.getDia().getNumeroDia());
-        dto.setBloqueHorario(
-                model.getBloqueHorario().stream().map(BloqueHorario::getNombreBloque).collect(Collectors.toSet()));
-        dto.setTipoBloqueHorario(model.getTipoBloqueHorario().toString());
+        // dto.setBloqueHorario(
+        // model.getBloqueHorario().stream().map(BloqueHorario::getNombreBloque).collect(Collectors.toSet()));
+        // dto.setTipoBloqueHorario(model.getTipoBloqueHorario().toString());
         dto.setEstatus(model.getEstatus());
 
         return dto;
