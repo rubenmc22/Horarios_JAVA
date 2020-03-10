@@ -10,6 +10,5 @@ public class AsignaturaDTO {
     private String nombre;
     private String descripcion;
     private List<Long> cargas;
-    private List<Long> docentes;
     private Boolean estatus = true;
 }

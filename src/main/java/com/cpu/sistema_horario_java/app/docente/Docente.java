@@ -1,23 +1,15 @@
 package com.cpu.sistema_horario_java.app.docente;
 
-import java.util.List;
-import java.util.ArrayList;
-
-//import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-import com.cpu.sistema_horario_java.app.asignatura.Asignatura;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @Builder
@@ -47,10 +39,10 @@ public class Docente {
     @Column(name = "correo", length = 100)
     private String correo;
 
-    @Builder.Default
-    @ToString.Exclude
-    @ManyToMany(mappedBy = "docentes")
-    List<Asignatura> asignaturas = new ArrayList<>();
+    // @Builder.Default
+    // @ToString.Exclude
+    // @ManyToMany(mappedBy = "docentes")
+    // List<Asignatura> asignaturas = new ArrayList<>();
 
     @Builder.Default
     @Column(name = "estatus")

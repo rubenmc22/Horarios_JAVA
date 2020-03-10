@@ -20,7 +20,6 @@ public class CursoMapper {
         model.setNombre(dto.getNombre());
         model.setDescripcion(dto.getDescripcion());
         model.setDias(dto.getDias().stream().map(d -> Dia.values()[d]).collect(Collectors.toSet()));
-        model.setCargaAcademica(car.getOne(dto.getCargaAcademica()));
         model.setEstatus(dto.getEstatus());
 
         return model;
@@ -31,7 +30,6 @@ public class CursoMapper {
         model.setNombre(dto.getNombre());
         model.setDescripcion(dto.getDescripcion());
         model.setDias(dto.getDias().stream().map(d -> Dia.values()[d]).collect(Collectors.toSet()));
-        model.setCargaAcademica(car.getOne(dto.getCargaAcademica()));
         model.setEstatus(dto.getEstatus());
 
         return model;
@@ -44,7 +42,6 @@ public class CursoMapper {
         dto.setNombre(model.getNombre());
         dto.setDescripcion(model.getDescripcion());
         dto.setDias(model.getDias().stream().map(d -> d.getNumeroDia()).collect(Collectors.toSet()));
-        dto.setCargaAcademica(model.getCargaAcademica() != null ? model.getCargaAcademica().getId() : null);
         dto.setEstatus(model.getEstatus());
 
         return dto;
@@ -56,7 +53,6 @@ public class CursoMapper {
         dto.setNombre(model.getNombre());
         dto.setDescripcion(model.getDescripcion());
         dto.setDias(model.getDias().stream().map(d -> d.getNumeroDia()).collect(Collectors.toSet()));
-        dto.setCargaAcademica(model.getCargaAcademica() != null ? model.getCargaAcademica().getId() : null);
         dto.setEstatus(model.getEstatus());
 
         return dto;

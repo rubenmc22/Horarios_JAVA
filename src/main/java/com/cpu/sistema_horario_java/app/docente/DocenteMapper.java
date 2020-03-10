@@ -1,8 +1,5 @@
 package com.cpu.sistema_horario_java.app.docente;
 
-import java.util.stream.Collectors;
-
-import com.cpu.sistema_horario_java.app.asignatura.Asignatura;
 import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +20,6 @@ public class DocenteMapper {
         model.setCedula(dto.getCedula());
         model.setTelefono(dto.getTelefono());
         model.setCorreo(dto.getCorreo());
-        model.setAsignaturas(ar.findAllById(dto.getAsignaturas()));
         model.setEstatus(dto.getEstatus());
 
         return model;
@@ -36,7 +32,6 @@ public class DocenteMapper {
         model.setCedula(dto.getCedula());
         model.setTelefono(dto.getTelefono());
         model.setCorreo(dto.getCorreo());
-        model.setAsignaturas(ar.findAllById(dto.getAsignaturas()));
         model.setEstatus(dto.getEstatus());
 
         return model;
@@ -51,7 +46,6 @@ public class DocenteMapper {
         dto.setCedula(model.getCedula());
         dto.setTelefono(model.getTelefono());
         dto.setCorreo(model.getCorreo());
-        dto.setAsignaturas(model.getAsignaturas().stream().map(Asignatura::getId).collect(Collectors.toList()));
         dto.setEstatus(model.getEstatus());
 
         return dto;
@@ -65,7 +59,6 @@ public class DocenteMapper {
         dto.setCedula(model.getCedula());
         dto.setTelefono(model.getTelefono());
         dto.setCorreo(model.getCorreo());
-        dto.setAsignaturas(model.getAsignaturas().stream().map(Asignatura::getId).collect(Collectors.toList()));
         dto.setEstatus(model.getEstatus());
 
         return dto;

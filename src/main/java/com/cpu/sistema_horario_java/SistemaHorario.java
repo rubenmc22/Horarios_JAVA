@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.cpu.sistema_horario_java.app.asignatura.Asignatura;
 import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
-import com.cpu.sistema_horario_java.app.asignatura_carga.AsignaturaCargaAcademicaRepository;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademica;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
 import com.cpu.sistema_horario_java.app.curso.Curso;
@@ -34,9 +33,8 @@ public class SistemaHorario {
 	}
 
 	@Bean
-	CommandLineRunner init(AsignaturaRepository aRepo, CargaAcademicaRepository cRepo,
-			AsignaturaCargaAcademicaRepository acaRepo, DocenteRepository dRepo, CursoRepository cuRepo,
-			PeriodRepository pRepo) {
+	CommandLineRunner init(AsignaturaRepository aRepo, CargaAcademicaRepository cRepo, DocenteRepository dRepo,
+			CursoRepository cuRepo, PeriodRepository pRepo) {
 
 		return args -> {
 			log.info("************ DATA LOADING ************\n");
@@ -60,12 +58,13 @@ public class SistemaHorario {
 			log.info("************ ASIGNATURAS CREADAS ************\n");
 
 			log.info("************ CREANDO CARGAS ACADEMICAS ************");
-			CargaAcademica ca1 = CargaAcademica.builder().nombre("Curriculo 1° año").build();
-			log.info("Guardando: " + cRepo.save(ca1));
-			CargaAcademica ca2 = CargaAcademica.builder().nombre("Curriculo 2° año").build();
-			log.info("Guardando: " + cRepo.save(ca2));
-			CargaAcademica ca3 = CargaAcademica.builder().nombre("Curriculo 3° año").build();
-			log.info("Guardando: " + cRepo.save(ca3));
+			CargaAcademica ca1 = new CargaAcademica();
+			//log.info("Guardando: " + cRepo.save(ca1));
+			CargaAcademica ca2 = new CargaAcademica();
+			//log.info("Guardando: " + cRepo.save(ca2));
+			CargaAcademica ca3 = new CargaAcademica();
+			CargaAcademica ca4 = new CargaAcademica();
+			//log.info("Guardando: " + cRepo.save(ca3));
 			log.info("************ CARGAS ACADEMICAS CREADAS ************\n");
 
 			log.info("************ CREANDO DIAS ************");
@@ -143,30 +142,25 @@ public class SistemaHorario {
 
 			log.info("************ PERIODOS CREADOS ************\n");
 
-			a1.addDocente(d1);
-			a1.addDocente(d2);
-			log.info("Guardando: " + aRepo.save(a1));
-
-			a2.addDocente(d2);
-			log.info("Guardando: " + aRepo.save(a2));
-
-			a3.addDocente(d3);
-			log.info("Guardando: " + aRepo.save(a3));
-
-			ca1.addCurso(cu1);
-			ca1.addAsignatura(a1);
-			ca1.addAsignatura(a2);
-			ca1.addAsignatura(a3);
+			ca1.setAsignatura(a1);
+			ca1.setCurso(cu1);
+			ca1.setDocente(d1);
 			log.info("Guardando: " + cRepo.save(ca1));
 
-			ca2.addCurso(cu2);
-			ca2.addAsignatura(a2);
-			ca2.addAsignatura(a3);
+			ca2.setAsignatura(a2);
+			ca2.setCurso(cu2);
+			ca2.setDocente(d2);
 			log.info("Guardando: " + cRepo.save(ca2));
 
-			ca3.addCurso(cu3A);
-			ca3.addCurso(cu3B);
+			ca3.setAsignatura(a3);
+			ca3.setCurso(cu3A);
+			ca3.setDocente(d3);
 			log.info("Guardando: " + cRepo.save(ca3));
+
+			ca4.setAsignatura(a1);
+			ca4.setCurso(cu3B);
+			ca4.setDocente(d2);
+			log.info("Guardando: " + cRepo.save(ca4));
 			log.info("************ FIN DE CARGA DE DATOS ************\n");
 
 		};

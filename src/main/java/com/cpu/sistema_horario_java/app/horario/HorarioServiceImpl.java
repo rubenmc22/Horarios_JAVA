@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 import com.cpu.sistema_horario_java.app.asignatura.Asignatura;
 import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
-import com.cpu.sistema_horario_java.app.asignatura_carga.AsignaturaCargaAcademica;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
 import com.cpu.sistema_horario_java.app.curso.Curso;
 import com.cpu.sistema_horario_java.app.curso.CursoRepository;

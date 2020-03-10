@@ -1,7 +1,5 @@
 package com.cpu.sistema_horario_java.app.docente;
 
-import java.util.List;
-
 import lombok.Data;
 
 @Data
@@ -12,6 +10,5 @@ public class DocenteDTO {
     private String cedula;
     private String telefono;
     private String correo;
-    private List<Long> asignaturas;
     private Boolean estatus = true;
 }
