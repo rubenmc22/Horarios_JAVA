@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademica;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
-import com.cpu.sistema_horario_java.app.curso.CursoRepository;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
 import com.cpu.sistema_horario_java.app.horario.HorarioDTO.Detalle;
 import com.cpu.sistema_horario_java.app.periodo.Period;
