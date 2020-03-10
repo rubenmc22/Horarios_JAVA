@@ -24,4 +24,12 @@ class SystemExceptionAdvice {
         return ex.getMessage();
 
     }
+
+    @ResponseBody
+    @ExceptionHandler(SystemException.WrongPasswordException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public final String handleWrongPasswordExceptions(Exception ex) {
+        return ex.getMessage();
+
+    }
 }
