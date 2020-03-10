@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/v1/horarios")
@@ -17,7 +16,6 @@ public class HorarioController {
 
     @Autowired
     private HorarioService service;
-
 
     @GetMapping("/{id}")
     public HorarioDTO buscar(@PathVariable Long id) {
@@ -31,7 +29,7 @@ public class HorarioController {
 
     @PostMapping
     public HorarioDTO guardar(@RequestBody HorarioDTO dto) {
-         return service.guardar(dto);
+        return service.guardar(dto);
     }
 
     @PutMapping("/{id}")

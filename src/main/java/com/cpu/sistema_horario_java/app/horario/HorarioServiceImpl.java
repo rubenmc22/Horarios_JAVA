@@ -112,9 +112,6 @@ public class HorarioServiceImpl implements HorarioService {
         for (final Dia dia : dias) {
             Horario horario = new Horario();
             for (Curso curso : cursos) {
-                horario.setDia(dia);
-                horario.setPeriodo(getRandomPeriod(periodos));
-                horario.setPeriodo(getRandomPeriod(periodos));
             }
 
         }
