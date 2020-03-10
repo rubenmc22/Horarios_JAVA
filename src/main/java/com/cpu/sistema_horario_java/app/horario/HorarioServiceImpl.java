@@ -9,16 +9,16 @@ import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTI
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+// import java.util.Random;
 import java.util.stream.Collectors;
 
-import com.cpu.sistema_horario_java.app.asignatura.Asignatura;
+// import com.cpu.sistema_horario_java.app.asignatura.Asignatura;
 import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
-import com.cpu.sistema_horario_java.app.curso.Curso;
+// import com.cpu.sistema_horario_java.app.curso.Curso;
 import com.cpu.sistema_horario_java.app.curso.CursoRepository;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
-import com.cpu.sistema_horario_java.app.periodo.Periodo;
+// import com.cpu.sistema_horario_java.app.periodo.Periodo;
 import com.cpu.sistema_horario_java.app.periodo.PeriodoRepository;
 import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 
@@ -101,26 +101,26 @@ public class HorarioServiceImpl implements HorarioService {
         return null;
     }
 
-    private Curso getRandomCurso(List<Curso> lista) {
-        int randomIndex = new Random().nextInt(lista.size());
-        Curso elemento = lista.get(randomIndex);
-        lista.remove(randomIndex);
-        return elemento;
-    }
+    // private Curso getRandomCurso(List<Curso> lista) {
+    //     int randomIndex = new Random().nextInt(lista.size());
+    //     Curso elemento = lista.get(randomIndex);
+    //     lista.remove(randomIndex);
+    //     return elemento;
+    // }
 
-    private Periodo getRandomPeriod(List<Periodo> lista) {
-        int randomIndex = new Random().nextInt(lista.size());
-        Periodo elemento = lista.get(randomIndex);
-        lista.remove(randomIndex);
-        return elemento;
-    }
+    // private Periodo getRandomPeriod(List<Periodo> lista) {
+    //     int randomIndex = new Random().nextInt(lista.size());
+    //     Periodo elemento = lista.get(randomIndex);
+    //     lista.remove(randomIndex);
+    //     return elemento;
+    // }
 
-    private Asignatura getRandomAsignatura(List<Asignatura> lista) {
-        int randomIndex = new Random().nextInt(lista.size());
-        Asignatura elemento = lista.get(randomIndex);
-        lista.remove(randomIndex);
-        return elemento;
-    }
+    // private Asignatura getRandomAsignatura(List<Asignatura> lista) {
+    //     int randomIndex = new Random().nextInt(lista.size());
+    //     Asignatura elemento = lista.get(randomIndex);
+    //     lista.remove(randomIndex);
+    //     return elemento;
+    // }
 
     /**
      * Returns a new RuntimeException

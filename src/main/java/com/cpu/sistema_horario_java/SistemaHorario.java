@@ -72,9 +72,6 @@ public class SistemaHorario {
 
 			log.info("************ CREANDO HORARIOS ************");
 			Horario h1 = new Horario();
-			Horario h2 = new Horario();
-			Horario h3 = new Horario();
-			Horario h4 = new Horario();
 			log.info("************ HORARIOS CREADOS ************\n");
 
 			log.info("************ CREANDO USUARIOS ************");
