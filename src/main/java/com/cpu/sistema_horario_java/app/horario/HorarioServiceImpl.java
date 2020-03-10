@@ -1,6 +1,5 @@
 package com.cpu.sistema_horario_java.app.horario;
 
-import com.cpu.sistema_horario_java.app.util.types.Dia;
 import com.cpu.sistema_horario_java.app.util.types.EntityType;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
@@ -8,13 +7,9 @@ import static com.cpu.sistema_horario_java.app.util.types.EntityType.HORARIO;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPLICATE_ENTITY;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import com.cpu.sistema_horario_java.app.asignatura.Asignatura;
@@ -23,8 +18,8 @@ import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
 import com.cpu.sistema_horario_java.app.curso.Curso;
 import com.cpu.sistema_horario_java.app.curso.CursoRepository;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
-import com.cpu.sistema_horario_java.app.periodo.Period;
-import com.cpu.sistema_horario_java.app.periodo.PeriodRepository;
+import com.cpu.sistema_horario_java.app.periodo.Periodo;
+import com.cpu.sistema_horario_java.app.periodo.PeriodoRepository;
 import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +41,7 @@ public class HorarioServiceImpl implements HorarioService {
     AsignaturaRepository ar;
 
     @Autowired
-    PeriodRepository pr;
+    PeriodoRepository pr;
 
     @Autowired
     CursoRepository cr;
@@ -103,19 +98,6 @@ public class HorarioServiceImpl implements HorarioService {
 
     public HorarioDTO generar() {
 
-        Dia[] dias = Dia.values();
-
-        List<Period> periodos = pr.findAll().stream().filter(Period::getEstatus).collect(Collectors.toList());
-
-        List<Curso> cursos = cr.findAll();
-
-        for (final Dia dia : dias) {
-            Horario horario = new Horario();
-            for (Curso curso : cursos) {
-            }
-
-        }
-
         return null;
     }
 
@@ -126,9 +108,9 @@ public class HorarioServiceImpl implements HorarioService {
         return elemento;
     }
 
-    private Period getRandomPeriod(List<Period> lista) {
+    private Periodo getRandomPeriod(List<Periodo> lista) {
         int randomIndex = new Random().nextInt(lista.size());
-        Period elemento = lista.get(randomIndex);
+        Periodo elemento = lista.get(randomIndex);
         lista.remove(randomIndex);
         return elemento;
     }

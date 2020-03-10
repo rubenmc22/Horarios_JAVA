@@ -12,8 +12,8 @@ import com.cpu.sistema_horario_java.app.carga.CargaAcademica;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
 import com.cpu.sistema_horario_java.app.horario.HorarioDTO.Detalle;
-import com.cpu.sistema_horario_java.app.periodo.Period;
-import com.cpu.sistema_horario_java.app.periodo.PeriodRepository;
+import com.cpu.sistema_horario_java.app.periodo.Periodo;
+import com.cpu.sistema_horario_java.app.periodo.PeriodoRepository;
 import com.cpu.sistema_horario_java.app.util.types.Dia;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,14 @@ public class HorarioMapper {
     @Autowired
     AsignaturaRepository ar;
     @Autowired
-    PeriodRepository pr;
+    PeriodoRepository pr;
     @Autowired
     CargaAcademicaRepository car;
 
     public Horario toModel(HorarioDTO dto) {
         Horario model = new Horario();
 
-        Map<Dia, Period> periodoDia = new HashMap<>();
+        Map<Dia, Periodo> periodoDia = new HashMap<>();
         List<Detalle> detalles = dto.getDetalles();
 
         for (HorarioDTO.Detalle detalle : detalles) {
@@ -52,7 +52,7 @@ public class HorarioMapper {
 
     public Horario toModel(HorarioDTO dto, Horario model) {
 
-        Map<Dia, Period> periodoDia = new HashMap<>();
+        Map<Dia, Periodo> periodoDia = new HashMap<>();
         List<Detalle> detalles = dto.getDetalles();
 
         for (HorarioDTO.Detalle detalle : detalles) {
@@ -99,13 +99,13 @@ public class HorarioMapper {
         return dto;
     }
 
-    private List<HorarioDTO.Detalle> getDetalles(Map<Dia, Period> datos) {
+    private List<HorarioDTO.Detalle> getDetalles(Map<Dia, Periodo> datos) {
         List<HorarioDTO.Detalle> detalles = new ArrayList<HorarioDTO.Detalle>();
 
-        Iterator<Entry<Dia, Period>> iterator = datos.entrySet().iterator();
+        Iterator<Entry<Dia, Periodo>> iterator = datos.entrySet().iterator();
         while (iterator.hasNext()) {
             HorarioDTO.Detalle detalle = new HorarioDTO.Detalle();
-            Entry<Dia, Period> dato = iterator.next();
+            Entry<Dia, Periodo> dato = iterator.next();
 
             detalle.setDia(dato.getKey().getNumeroDia());
             detalle.setPeriodo(dato.getValue().getId());

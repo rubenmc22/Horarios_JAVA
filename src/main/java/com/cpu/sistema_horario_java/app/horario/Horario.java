@@ -14,7 +14,7 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 import com.cpu.sistema_horario_java.app.carga.CargaAcademica;
-import com.cpu.sistema_horario_java.app.periodo.Period;
+import com.cpu.sistema_horario_java.app.periodo.Periodo;
 import com.cpu.sistema_horario_java.app.util.types.Dia;
 
 import lombok.AllArgsConstructor;
@@ -44,7 +44,7 @@ public class Horario {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "horario_carga_academica")
     @JoinColumn(name = "id_periodo")
-    private Map<Dia, Period> periodoDia;
+    private Map<Dia, Periodo> periodoDia;
 
     @Builder.Default
     @Column(name = "estatus")

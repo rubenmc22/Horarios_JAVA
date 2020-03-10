@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "periodos")
-public class Period implements Comparable<Period> {
+public class Periodo implements Comparable<Periodo> {
 
     @Id
     @GeneratedValue
@@ -41,7 +41,7 @@ public class Period implements Comparable<Period> {
             return false;
         }
 
-        Period that = (Period) o;
+        Periodo that = (Periodo) o;
 
         return this.id == that.id && this.bloqueHorario == that.bloqueHorario
                 && this.inicioPeriodo.equals(that.inicioPeriodo) && this.finPeriodo.equals(that.finPeriodo);
@@ -53,7 +53,7 @@ public class Period implements Comparable<Period> {
     }
 
     @Override
-    public int compareTo(Period o) {
+    public int compareTo(Periodo o) {
         return Integer.compare(this.bloqueHorario, o.bloqueHorario);
 
     }
