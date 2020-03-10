@@ -17,8 +17,10 @@ import com.cpu.sistema_horario_java.app.docente.Docente;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
 import com.cpu.sistema_horario_java.app.horario.Horario;
 import com.cpu.sistema_horario_java.app.horario.HorarioRepository;
-import com.cpu.sistema_horario_java.app.periodo.Period;
-import com.cpu.sistema_horario_java.app.periodo.PeriodRepository;
+import com.cpu.sistema_horario_java.app.periodo.Periodo;
+import com.cpu.sistema_horario_java.app.periodo.PeriodoRepository;
+import com.cpu.sistema_horario_java.app.usuario.Usuario;
+import com.cpu.sistema_horario_java.app.usuario.UsuarioRepository;
 import com.cpu.sistema_horario_java.app.util.types.Dia;
 
 import org.springframework.boot.CommandLineRunner;
@@ -38,7 +40,7 @@ public class SistemaHorario {
 
 	@Bean
 	CommandLineRunner init(AsignaturaRepository aRepo, CargaAcademicaRepository cRepo, DocenteRepository dRepo,
-			CursoRepository cuRepo, PeriodRepository pRepo, HorarioRepository hr) {
+			CursoRepository cuRepo, PeriodoRepository pRepo, HorarioRepository hr, UsuarioRepository ur) {
 
 		return args -> {
 			log.info("************ DATA LOADING ************\n");
@@ -75,6 +77,15 @@ public class SistemaHorario {
 			Horario h4 = new Horario();
 			log.info("************ HORARIOS CREADOS ************\n");
 
+			log.info("************ CREANDO USUARIOS ************");
+			Usuario u1 = Usuario.builder().cedula("21130426").password("21130426").build();
+			log.info("Guardando: " + ur.save(u1));
+			Usuario u2 = Usuario.builder().cedula("24367965").password("24367965").build();
+			log.info("Guardando: " + ur.save(u2));
+			Usuario u3 = Usuario.builder().cedula("20793760").password("20793760").build();
+			log.info("Guardando: " + ur.save(u3));
+			log.info("************ USUARIOS CREADOS ************\n");
+
 			log.info("************ CREANDO DIAS ************");
 			Set<Dia> dias = Arrays.asList(Dia.LUNES, Dia.MARTES, Dia.MIERCOLES, Dia.JUEVES).stream()
 					.collect(Collectors.toSet());
@@ -98,7 +109,7 @@ public class SistemaHorario {
 			log.info("Guardando: " + cuRepo.save(cu6));
 			log.info("************ CURSOS CREADOS ************\n");
 
-			log.info("************ CREANDO PERIODOS ************");
+			log.info("************ CREANDO PeriodoS ************");
 			final LocalTime _7_AM = LocalTime.now().withHour(7).withMinute(0).withSecond(0).withNano(0);
 			final LocalTime _7_15_AM = _7_AM.plusMinutes(15);
 			final LocalTime _8_AM = _7_15_AM.plusMinutes(45);
@@ -115,23 +126,23 @@ public class SistemaHorario {
 			final LocalTime _3_25_PM = _2_40_PM.plusMinutes(45);
 			final LocalTime _4_10_PM = _3_25_PM.plusMinutes(45);
 
-			Period p1 = Period.builder().bloqueHorario(1).inicioPeriodo(_7_AM).finPeriodo(_7_15_AM).estatus(false)
+			Periodo p1 = Periodo.builder().bloqueHorario(1).inicioPeriodo(_7_AM).finPeriodo(_7_15_AM).estatus(false)
 					.build();
-			Period p2 = Period.builder().bloqueHorario(2).inicioPeriodo(_7_15_AM).finPeriodo(_8_AM).build();
-			Period p3 = Period.builder().bloqueHorario(3).inicioPeriodo(_8_AM).finPeriodo(_8_45_AM).build();
-			Period p4 = Period.builder().bloqueHorario(4).inicioPeriodo(_8_45_AM).finPeriodo(_9_05_AM).estatus(false)
+			Periodo p2 = Periodo.builder().bloqueHorario(2).inicioPeriodo(_7_15_AM).finPeriodo(_8_AM).build();
+			Periodo p3 = Periodo.builder().bloqueHorario(3).inicioPeriodo(_8_AM).finPeriodo(_8_45_AM).build();
+			Periodo p4 = Periodo.builder().bloqueHorario(4).inicioPeriodo(_8_45_AM).finPeriodo(_9_05_AM).estatus(false)
 					.build();
-			Period p5 = Period.builder().bloqueHorario(5).inicioPeriodo(_9_05_AM).finPeriodo(_9_50_AM).build();
-			Period p6 = Period.builder().bloqueHorario(6).inicioPeriodo(_9_50_AM).finPeriodo(_10_35_AM).build();
-			Period p7 = Period.builder().bloqueHorario(7).inicioPeriodo(_10_35_AM).finPeriodo(_11_20_AM).build();
-			Period p8 = Period.builder().bloqueHorario(8).inicioPeriodo(_11_20_AM).finPeriodo(_12_05_PM).build();
-			Period p9 = Period.builder().bloqueHorario(9).inicioPeriodo(_12_05_PM).finPeriodo(_12_25_PM).estatus(false)
-					.build();
-			Period p10 = Period.builder().bloqueHorario(10).inicioPeriodo(_12_25_PM).finPeriodo(_1_10_PM).build();
-			Period p11 = Period.builder().bloqueHorario(11).inicioPeriodo(_1_10_PM).finPeriodo(_1_55_PM).build();
-			Period p12 = Period.builder().bloqueHorario(12).inicioPeriodo(_1_55_PM).finPeriodo(_2_40_PM).build();
-			Period p13 = Period.builder().bloqueHorario(13).inicioPeriodo(_2_40_PM).finPeriodo(_3_25_PM).build();
-			Period p14 = Period.builder().bloqueHorario(14).inicioPeriodo(_3_25_PM).finPeriodo(_4_10_PM).build();
+			Periodo p5 = Periodo.builder().bloqueHorario(5).inicioPeriodo(_9_05_AM).finPeriodo(_9_50_AM).build();
+			Periodo p6 = Periodo.builder().bloqueHorario(6).inicioPeriodo(_9_50_AM).finPeriodo(_10_35_AM).build();
+			Periodo p7 = Periodo.builder().bloqueHorario(7).inicioPeriodo(_10_35_AM).finPeriodo(_11_20_AM).build();
+			Periodo p8 = Periodo.builder().bloqueHorario(8).inicioPeriodo(_11_20_AM).finPeriodo(_12_05_PM).build();
+			Periodo p9 = Periodo.builder().bloqueHorario(9).inicioPeriodo(_12_05_PM).finPeriodo(_12_25_PM)
+					.estatus(false).build();
+			Periodo p10 = Periodo.builder().bloqueHorario(10).inicioPeriodo(_12_25_PM).finPeriodo(_1_10_PM).build();
+			Periodo p11 = Periodo.builder().bloqueHorario(11).inicioPeriodo(_1_10_PM).finPeriodo(_1_55_PM).build();
+			Periodo p12 = Periodo.builder().bloqueHorario(12).inicioPeriodo(_1_55_PM).finPeriodo(_2_40_PM).build();
+			Periodo p13 = Periodo.builder().bloqueHorario(13).inicioPeriodo(_2_40_PM).finPeriodo(_3_25_PM).build();
+			Periodo p14 = Periodo.builder().bloqueHorario(14).inicioPeriodo(_3_25_PM).finPeriodo(_4_10_PM).build();
 
 			log.info("Guardando: " + pRepo.save(p1));
 			log.info("Guardando: " + pRepo.save(p2));
@@ -148,7 +159,7 @@ public class SistemaHorario {
 			log.info("Guardando: " + pRepo.save(p13));
 			log.info("Guardando: " + pRepo.save(p14));
 
-			log.info("************ PERIODOS CREADOS ************\n");
+			log.info("************ PeriodoOS CREADOS ************\n");
 
 			log.info("************ ASIGNACION DE DATOS A CARGA ACADEMICA ************");
 
@@ -156,7 +167,7 @@ public class SistemaHorario {
 			ca1.setCurso(cu1);
 			ca1.setDocente(d1);
 			ca1.setHoras(1);
-			//log.info("Guardando: " + cRepo.save(ca1));
+			// log.info("Guardando: " + cRepo.save(ca1));
 
 			ca2.setAsignatura(a2);
 			ca2.setCurso(cu2);
@@ -178,7 +189,7 @@ public class SistemaHorario {
 
 			log.info("************ ASIGNACION DE DATOS A HORARIO ************");
 
-			Map<Dia, Period> diaPeriodoUno = new HashMap<>();
+			Map<Dia, Periodo> diaPeriodoUno = new HashMap<>();
 			diaPeriodoUno.put(Dia.LUNES, p2);
 			diaPeriodoUno.put(Dia.JUEVES, p7);
 			h1.setCargaAcademica(ca1);

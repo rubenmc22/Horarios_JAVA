@@ -3,9 +3,10 @@ package com.cpu.sistema_horario_java.app.usuario;
 import com.cpu.sistema_horario_java.app.util.types.EntityType;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
-import static com.cpu.sistema_horario_java.app.util.types.EntityType.HORARIO;
+import static com.cpu.sistema_horario_java.app.util.types.EntityType.USUARIO;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPLICATE_ENTITY;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
+import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.WRONG_PASSWORD;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (model.isPresent()) {
             return model.get();
         }
-        throw exception(HORARIO, ENTITY_NOT_FOUND, id.toString());
+        throw exception(USUARIO, ENTITY_NOT_FOUND, id.toString());
     }
 
     @Override
@@ -38,13 +39,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario guardar(final Usuario dto) {
-        final Optional<Usuario> model = repo.findById(dto.getId());
+        final Optional<Usuario> model = repo.findByCedula(dto.getCedula());
 
         if (!model.isPresent()) {
             return repo.save(dto);
         }
 
-        throw exception(HORARIO, DUPLICATE_ENTITY, dto.getId().toString());
+        throw exception(USUARIO, DUPLICATE_ENTITY, dto.getId().toString());
     }
 
     @Override
@@ -56,7 +57,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             dto.setId(id);
             repo.save(dto);
         }
-        throw exception(HORARIO, ENTITY_NOT_FOUND, id.toString());
+        throw exception(USUARIO, ENTITY_NOT_FOUND, id.toString());
     }
 
     @Override
@@ -66,7 +67,21 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (model.isPresent()) {
             repo.delete(model.get());
         }
-        throw exception(HORARIO, ENTITY_NOT_FOUND, id.toString());
+        throw exception(USUARIO, ENTITY_NOT_FOUND, id.toString());
+    }
+
+    @Override
+    public Usuario login(Usuario dto) {
+
+        final Optional<Usuario> model = repo.findByCedula(dto.getCedula());
+
+        if (model.isPresent()) {
+            if (model.get().getPassword().equals(dto.getPassword())) {
+                return model.get();
+            }
+            throw exception(USUARIO, WRONG_PASSWORD, dto.getCedula());
+        }
+        throw exception(USUARIO, ENTITY_NOT_FOUND, dto.getCedula());
     }
 
     /**

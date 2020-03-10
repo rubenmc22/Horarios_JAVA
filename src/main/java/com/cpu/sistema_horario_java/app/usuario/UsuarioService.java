@@ -14,4 +14,6 @@ public interface UsuarioService {
 
     void eliminar(Long id);
 
+    Usuario login(Usuario usuario);
+
 }
