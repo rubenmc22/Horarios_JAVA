@@ -39,7 +39,7 @@ public class HorarioMapper {
 
         for (HorarioDTO.Detalle detalle : detalles) {
             periodoDia.put(Dia.values()[detalle.getDia()],
-                    detalle.getPeriodo() == null ? pr.getOne(2L) : pr.getOne(detalle.getPeriodo()));
+                    detalle.getPeriodo() == null ? null : pr.getOne(detalle.getPeriodo()));
         }
 
         model.setId(dto.getId());
@@ -57,7 +57,7 @@ public class HorarioMapper {
 
         for (HorarioDTO.Detalle detalle : detalles) {
             periodoDia.put(Dia.values()[detalle.getDia()],
-                    detalle.getPeriodo() == null ? pr.getOne(2L) : pr.getOne(detalle.getPeriodo()));
+                    detalle.getPeriodo() == null ? null : pr.getOne(detalle.getPeriodo()));
         }
 
         model.setCargaAcademica(dto.getCargaAcademica() == null ? null : car.getOne(dto.getCargaAcademica()));

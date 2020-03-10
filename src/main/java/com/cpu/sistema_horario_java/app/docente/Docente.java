@@ -39,11 +39,6 @@ public class Docente {
     @Column(name = "correo", length = 100)
     private String correo;
 
-    // @Builder.Default
-    // @ToString.Exclude
-    // @ManyToMany(mappedBy = "docentes")
-    // List<Asignatura> asignaturas = new ArrayList<>();
-
     @Builder.Default
     @Column(name = "estatus")
     private Boolean estatus = true;

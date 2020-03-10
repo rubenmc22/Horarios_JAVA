@@ -12,7 +12,7 @@ import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
 import static com.cpu.sistema_horario_java.app.util.types.EntityType.CARGA_ACADEMICA;
-import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPLICATE_ENTITY;
+//import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPLICATE_ENTITY;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
 
 @Service
@@ -41,13 +41,9 @@ public class CargaAcademicaServiceImpl implements CargaAcademicaService {
 
     @Override
     public CargaAcademicaDTO guardar(CargaAcademicaDTO dto) {
-        Optional<CargaAcademica> model = dto.getId().equals(null) ? Optional.empty() : repo.findById(dto.getId());
-
-        if (!model.isPresent()) {
-            return mapper.toDTO(repo.save(mapper.toModel(dto)));
-        }
-
-        throw exception(CARGA_ACADEMICA, DUPLICATE_ENTITY, dto.toString());
+        // TODO validate existence before save
+        return mapper.toDTO(repo.save(mapper.toModel(dto)));
+        // throw exception(CARGA_ACADEMICA, DUPLICATE_ENTITY, dto.toString());
     }
 
     @Override
