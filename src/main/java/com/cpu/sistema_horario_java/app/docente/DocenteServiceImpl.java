@@ -67,8 +67,9 @@ public class DocenteServiceImpl implements DocenteService {
 
         if (model.isPresent()) {
             repo.delete(model.get());
+        } else {
+            throw exception(DOCENTE, ENTITY_NOT_FOUND, Long.toString(id));
         }
-        throw exception(DOCENTE, ENTITY_NOT_FOUND, id.toString());
     }
 
     /**
