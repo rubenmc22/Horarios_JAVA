@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DocenteRepository extends JpaRepository<Docente, Long> {
 
-    public Optional<DocenteDTO> findByNombre(String nombre);
+    public Optional<Docente> findByCedula(String cedula);
 }

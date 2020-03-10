@@ -41,13 +41,13 @@ public class DocenteServiceImpl implements DocenteService {
 
     @Override
     public DocenteDTO guardar(DocenteDTO dto) {
-        Optional<DocenteDTO> model = repo.findByNombre(dto.getNombre());
+        Optional<Docente> model = repo.findByCedula(dto.getCedula());
 
         if (!model.isPresent()) {
             return mapper.toDTO(repo.save(mapper.toModel(dto)));
         }
 
-        throw exception(DOCENTE, DUPLICATE_ENTITY, dto.getNombre());
+        throw exception(DOCENTE, DUPLICATE_ENTITY, dto.getCedula());
     }
 
     @Override
