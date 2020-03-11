@@ -49,7 +49,8 @@ public class CargaAcademica {
     @JoinColumn(name = "id_docente")
     private Docente docente;
 
-    private Integer horas;
+    @Builder.Default
+    private Integer horas = 1;
 
     @Builder.Default
     private Boolean estatus = true;

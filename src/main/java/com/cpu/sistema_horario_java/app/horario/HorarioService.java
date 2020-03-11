@@ -12,6 +12,8 @@ public interface HorarioService {
 
     HorarioDTO actualizar(Long id, HorarioDTO dto);
 
+    void generar();
+
     void eliminar(Long id);
 
 }

@@ -13,14 +13,15 @@ import com.cpu.sistema_horario_java.app.curso.Curso;
 import com.cpu.sistema_horario_java.app.curso.CursoRepository;
 import com.cpu.sistema_horario_java.app.docente.Docente;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
-import com.cpu.sistema_horario_java.app.horario.Horario;
 import com.cpu.sistema_horario_java.app.horario.HorarioRepository;
+import com.cpu.sistema_horario_java.app.horario.HorarioServiceImpl;
 import com.cpu.sistema_horario_java.app.periodo.Periodo;
 import com.cpu.sistema_horario_java.app.periodo.PeriodoRepository;
 import com.cpu.sistema_horario_java.app.usuario.Usuario;
 import com.cpu.sistema_horario_java.app.usuario.UsuarioRepository;
 import com.cpu.sistema_horario_java.app.util.types.Dia;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,6 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootApplication
 @Slf4j
 public class SistemaHorario {
+
+	@Autowired
+	HorarioServiceImpl hsi;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SistemaHorario.class, args);
@@ -72,11 +76,6 @@ public class SistemaHorario {
 			cRepo.save(ca4);
 
 			log.info("************ CARGAS ACADEMICAS CREADAS ************\n");
-
-			log.info("************ CREANDO HORARIOS ************");
-			Horario h1 = new Horario();
-			//hr.save(h1);
-			log.info("************ HORARIOS CREADOS ************\n");
 
 			log.info("************ CREANDO USUARIOS ************");
 			Usuario u1 = Usuario.builder().cedula("21130426").password("21130426").build();
@@ -188,13 +187,9 @@ public class SistemaHorario {
 			ca4.setHoras(4);
 			log.info("Guardando: " + cRepo.save(ca4));
 
-			log.info("************ ASIGNACION DE DATOS A HORARIO ************");
-
-			h1.setId(ca1.getId());
-			h1.setCargaAcademica(ca1);
-			h1.setDia(Dia.LUNES);
-			h1.setPeriodo(p4);
-			log.info("Guardando: " + hr.save(h1));
+			log.info("************ GENERANDO HORARIOS ************");
+			hsi.generar();
+			log.info("************ HORARIOS GENERANDOS ************");
 
 			log.info("************ FIN DE CARGA DE DATOS ************\n");
 

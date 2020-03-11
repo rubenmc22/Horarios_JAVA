@@ -1,16 +1,17 @@
 package com.cpu.sistema_horario_java.app.horario;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+//import javax.persistence.UniqueConstraint;
 
 import com.cpu.sistema_horario_java.app.carga.CargaAcademica;
 import com.cpu.sistema_horario_java.app.periodo.Periodo;
@@ -27,16 +28,20 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "horarios", uniqueConstraints = @UniqueConstraint(columnNames = { "id_carga_academica", "dia",
-        "id_periodo" }))
+// TODO INCLUDE UNIQUE CONSTRAINT
+@Table(name = "horarios"
+// , uniqueConstraints = @UniqueConstraint(columnNames = { "id_carga_academica",
+// "dia", "id_periodo" })
+)
 public class Horario {
 
     @Id
+    @GeneratedValue
     @Builder.Default
     private Long id = null;
 
-    @MapsId
-    @ManyToOne
+    // @MapsId
+    @ManyToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
     @JoinColumn(name = "id_carga_academica")
     private CargaAcademica cargaAcademica;
@@ -45,7 +50,7 @@ public class Horario {
     private Dia dia;
 
     @OneToOne
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
     @JoinColumn(name = "id_periodo")
     private Periodo periodo;
