@@ -37,11 +37,6 @@ public class Curso {
     @Column(name = "descripcion", length = 100)
     private String descripcion;
 
-    // @ManyToOne(cascade = CascadeType.MERGE)
-    // @JoinColumn(name = "id_carga_academica")
-    // @ToString.Exclude
-    // private CargaAcademica cargaAcademica;
-
     @ElementCollection
     @Enumerated(EnumType.STRING)
     private Set<Dia> dias;

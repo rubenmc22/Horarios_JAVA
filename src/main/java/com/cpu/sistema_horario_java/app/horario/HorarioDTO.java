@@ -1,26 +1,23 @@
 package com.cpu.sistema_horario_java.app.horario;
 
-import java.util.List;
-
 import lombok.Data;
 
 @Data
 public class HorarioDTO {
+
+    // data to build model
     private Long id;
-    // Datos para armar el modelo
     private Long cargaAcademica;
-    private List<Detalle> detalles;
-    // **************************
-    private Long asignatura;
-    private Long curso;
-    private Long docente;
+    private Long periodo;
+    private Integer dia;
+
+    // details
+    private String asignatura;
+    private String curso;
+    private String docente;
+    private String inicioPeriodo;
+    private String finPeriodo;
+
     private Boolean estatus = true;
 
-    @Data
-    static class Detalle {
-        Long periodo;
-        Integer dia;
-        String inicioPeriodo;
-        String finPeriodo;
-    }
 }

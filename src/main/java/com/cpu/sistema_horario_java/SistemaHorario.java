@@ -2,8 +2,6 @@ package com.cpu.sistema_horario_java;
 
 import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -65,13 +63,19 @@ public class SistemaHorario {
 
 			log.info("************ CREANDO CARGAS ACADEMICAS ************");
 			CargaAcademica ca1 = new CargaAcademica();
+			cRepo.save(ca1);
 			CargaAcademica ca2 = new CargaAcademica();
+			cRepo.save(ca2);
 			CargaAcademica ca3 = new CargaAcademica();
+			cRepo.save(ca3);
 			CargaAcademica ca4 = new CargaAcademica();
+			cRepo.save(ca4);
+
 			log.info("************ CARGAS ACADEMICAS CREADAS ************\n");
 
 			log.info("************ CREANDO HORARIOS ************");
 			Horario h1 = new Horario();
+			//hr.save(h1);
 			log.info("************ HORARIOS CREADOS ************\n");
 
 			log.info("************ CREANDO USUARIOS ************");
@@ -164,7 +168,7 @@ public class SistemaHorario {
 			ca1.setCurso(cu1);
 			ca1.setDocente(d1);
 			ca1.setHoras(1);
-			// log.info("Guardando: " + cRepo.save(ca1));
+			log.info("Guardando: " + cRepo.save(ca1));
 
 			ca2.setAsignatura(a2);
 			ca2.setCurso(cu2);
@@ -186,11 +190,10 @@ public class SistemaHorario {
 
 			log.info("************ ASIGNACION DE DATOS A HORARIO ************");
 
-			Map<Dia, Periodo> diaPeriodoUno = new HashMap<>();
-			diaPeriodoUno.put(Dia.LUNES, p2);
-			diaPeriodoUno.put(Dia.JUEVES, p7);
+			h1.setId(ca1.getId());
 			h1.setCargaAcademica(ca1);
-			h1.setPeriodoDia(diaPeriodoUno);
+			h1.setDia(Dia.LUNES);
+			h1.setPeriodo(p4);
 			log.info("Guardando: " + hr.save(h1));
 
 			log.info("************ FIN DE CARGA DE DATOS ************\n");
