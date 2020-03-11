@@ -9,6 +9,7 @@ import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPL
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -105,81 +106,91 @@ public class HorarioServiceImpl implements HorarioService {
     @Transactional
     public void generar() {
 
-        final List<Periodo> periodos = pr.findAll();
+        List<Periodo> periodos = pr.findAll();
         List<Dia> dias = new ArrayList<>();
-        List<CargaAcademica> cargasAcademicas = car.findAll();
-
         for (Dia dia : Dia.values()) {
             if (dia.getNumeroDia() < 6) {
                 dias.add(dia);
             }
         }
+        List<CargaAcademica> cargasAcademicas = car.findAll();
 
-        while (dias.size() > 0) {
-            List<Periodo> controlPeriodos = periodos;
-            Dia alDia = getRandomDia(dias);
+        Collections.shuffle(dias);
+        Collections.shuffle(periodos);
+        Collections.shuffle(cargasAcademicas);
 
-            Periodo alPer = getRandomPeriod(controlPeriodos);
-            Optional<Periodo> siguiente = Optional.empty();
-            CargaAcademica alCar = getRandomCargaAcademica(cargasAcademicas);
-            Integer horasCarga = alCar.getHoras();
+        for (Periodo bloque : periodos) {
+            otro_bloque:
 
-            if (cargasAcademicas.size() <= 0) {
-                break;
-            }
+            for (Dia dia : dias) {
+                log.info("dia: " + dia);
+                log.info("bloque: " + bloque);
 
-            if (!alPer.getEstatus()) {
-                dias.add(alDia);
-                periodos.remove(alPer);
-                cargasAcademicas.add(alCar);
-                continue;
-            }
+                if (!bloque.getEstatus()) {
+                    log.info("bloque inactivo: " + bloque);
+                    break otro_bloque;
+                }
 
-            while (horasCarga >= 1) {
-                if (horasCarga > 1 && alPer.getBloqueHorario() < 14) {
-                    siguiente = pr.findById(alPer.getId() + 1L);
+                if (cargasAcademicas.size() <= 0) {
+                    break;
+                }
+                boolean primeraVuelta = true;
+                CargaAcademica cargaAleatoria = getRandomCargaAcademica(cargasAcademicas);
+                int horas = cargaAleatoria.getHoras();
 
-                    if (siguiente.isPresent()) {
+                while (horas >= 1) {
+                    Horario horario1 = new Horario();
+                    Periodo bloqueParaAsignar = new Periodo();
 
-                        // TODO REPLACE TRY-CATCH BY QUERY-VALIDATE FUNCTION
-                        try {
-                            if (validate(alCar.getId(), alDia, siguiente.get().getId())) {
-                                horasCarga--;
-                                log.info("GUARDANDO HORARIO 2: " + repo.save(Horario.builder().dia(alDia)
-                                        .periodo(siguiente.get()).cargaAcademica(alCar).build()));
-                            }
-                        } catch (Exception e) {
-                            // TODO VALIDATE IF ITS SAFE TO REINSERT VALUES
-                            log.info("ERROR DE LLAVE DUPLICADA AL GUARDAR.");
-                            break;
+                    if (primeraVuelta) {
+                        bloqueParaAsignar = bloque;
+                        primeraVuelta = false;
+                    } else {
+                        bloqueParaAsignar = getRandomPeriod(periodos, false);
+                    }
+
+                    horario1.setDia(dia);
+                    horario1.setPeriodo(bloqueParaAsignar);
+                    horario1.setCargaAcademica(cargaAleatoria);
+
+                    if (horas > 0 && bloque.getBloqueHorario() < 14) {
+
+                        // TODO agregar variable para hora que no queda en pareja y pueda ser agregada
+                        // otro día.
+
+                        Periodo siguienteBloque = pr.getOne(bloque.getId() + 1);
+
+                        if (siguienteBloque.getEstatus() && notAlreadyPersisted(cargaAleatoria.getId(), dia.toString(),
+                                siguienteBloque.getId())) {
+                            Horario horario2 = new Horario();
+
+                            horario2.setDia(dia);
+                            horario2.setPeriodo(siguienteBloque);
+                            horario2.setCargaAcademica(cargaAleatoria);
+                            repo.save(horario2);
+                            horas--;
                         }
 
                     }
-                }
 
-                // TODO REPLACE TRY-CATCH BY QUERY-VALIDATE FUNCTION
-                try {
-                    if (validate(alCar.getId(), alDia, siguiente.get().getId())) {
-                        horasCarga--;
-                        log.info("GUARDANDO HORARIO 2: "
-                                + repo.save(Horario.builder().dia(alDia).periodo(alPer).cargaAcademica(alCar).build()));
+                    if (notAlreadyPersisted(cargaAleatoria.getId(), dia.toString(), bloqueParaAsignar.getId())) {
+                        horas--;
+                        repo.save(horario1);
                     }
-                } catch (Exception e) {
-                    // TODO VALIDATE IF ITS SAFE TO REINSERT VALUES
-                    log.info("ERROR DE LLAVE DUPLICADA AL GUARDAR.");
-                    break;
+
                 }
 
             }
-
         }
 
     }
 
-    private Periodo getRandomPeriod(List<Periodo> lista) {
+    private Periodo getRandomPeriod(List<Periodo> lista, boolean removeElement) {
         int randomIndex = new Random().nextInt(lista.size());
         Periodo elemento = lista.get(randomIndex);
-        lista.remove(randomIndex);
+        if (removeElement) {
+            lista.remove(randomIndex);
+        }
         return elemento;
     }
 
@@ -190,16 +201,8 @@ public class HorarioServiceImpl implements HorarioService {
         return elemento;
     }
 
-    private Dia getRandomDia(List<Dia> lista) {
-        int randomIndex = new Random().nextInt(lista.size());
-        Dia elemento = lista.get(randomIndex);
-        lista.remove(randomIndex);
-        return elemento;
-    }
-
-    private boolean validate(Long cargaAcademica, Dia dia, Long periodo) {
-        // return !repo.getHorarioByDetails(cargaAcademica, dia, periodo).isPresent();
-        return true;
+    private boolean notAlreadyPersisted(Long cargaAcademica, String dia, Long periodo) {
+        return !repo.getHorarioByDetails(cargaAcademica, dia, periodo).isPresent();
     }
 
     /**
