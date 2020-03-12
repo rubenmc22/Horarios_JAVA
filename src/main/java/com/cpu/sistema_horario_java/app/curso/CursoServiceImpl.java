@@ -1,6 +1,7 @@
 package com.cpu.sistema_horario_java.app.curso;
 
 import com.cpu.sistema_horario_java.app.util.types.EntityType;
+import com.cpu.sistema_horario_java.app.horario.HorarioRepository;
 import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
@@ -20,6 +21,9 @@ public class CursoServiceImpl implements CursoService {
 
     @Autowired
     CursoRepository repo;
+
+    @Autowired
+    HorarioRepository hr;
 
     @Autowired
     CursoMapper mapper;
@@ -66,9 +70,12 @@ public class CursoServiceImpl implements CursoService {
         Optional<Curso> model = repo.findById(id);
 
         if (model.isPresent()) {
+            hr.deleteAll();
+            repo.deleteAllCargaAssociatedToCurso(model.get());
             repo.delete(model.get());
+        } else {
+            throw exception(CURSO, ENTITY_NOT_FOUND, id.toString());
         }
-        throw exception(CURSO, ENTITY_NOT_FOUND, id.toString());
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.cpu.sistema_horario_java.app.horario;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -40,8 +39,7 @@ public class Horario {
     @Builder.Default
     private Long id = null;
 
-    // @MapsId
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @ToString.Exclude
     @JoinColumn(name = "id_carga_academica")
     private CargaAcademica cargaAcademica;
@@ -50,7 +48,7 @@ public class Horario {
     private Dia dia;
 
     @OneToOne
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @ToString.Exclude
     @JoinColumn(name = "id_periodo")
     private Periodo periodo;

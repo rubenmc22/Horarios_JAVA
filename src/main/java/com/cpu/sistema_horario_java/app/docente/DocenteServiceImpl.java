@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.cpu.sistema_horario_java.app.util.types.EntityType;
+import com.cpu.sistema_horario_java.app.horario.HorarioRepository;
 import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
@@ -20,6 +21,9 @@ public class DocenteServiceImpl implements DocenteService {
 
     @Autowired
     DocenteRepository repo;
+
+    @Autowired
+    HorarioRepository hr;
 
     @Autowired
     DocenteMapper mapper;
@@ -66,6 +70,8 @@ public class DocenteServiceImpl implements DocenteService {
         Optional<Docente> model = repo.findById(id);
 
         if (model.isPresent()) {
+            hr.deleteAll();
+            repo.deleteAllCargaAssociatedToDocente(model.get());
             repo.delete(model.get());
         } else {
             throw exception(DOCENTE, ENTITY_NOT_FOUND, Long.toString(id));
