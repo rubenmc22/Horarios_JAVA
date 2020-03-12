@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
-
+import com.cpu.sistema_horario_java.app.horario.HorarioRepository;
 import com.cpu.sistema_horario_java.app.util.types.EntityType;
 import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
@@ -22,8 +22,12 @@ public class AsignaturaServiceImpl implements AsignaturaService {
 
     @Autowired
     AsignaturaRepository repo;
+
     @Autowired
     CargaAcademicaRepository car;
+
+    @Autowired
+    HorarioRepository hr;
 
     @Autowired
     AsignaturaMapper matMapper;
@@ -45,9 +49,9 @@ public class AsignaturaServiceImpl implements AsignaturaService {
 
     @Override
     public AsignaturaDTO guardar(AsignaturaDTO dto) {
-        Optional<AsignaturaDTO> asignatura = repo.findByNombre(dto.getNombre());
+        Optional<AsignaturaDTO> model = repo.findByNombre(dto.getNombre());
 
-        if (!asignatura.isPresent()) {
+        if (!model.isPresent()) {
             return matMapper.toDTO(repo.save(matMapper.toModel(dto)));
         }
 
@@ -70,9 +74,12 @@ public class AsignaturaServiceImpl implements AsignaturaService {
         Optional<Asignatura> asignatura = repo.findById(id);
 
         if (asignatura.isPresent()) {
+            hr.deleteAll();
+            repo.deleteAllCargaAssociatedToAsignatura(asignatura.get());
             repo.delete(asignatura.get());
+        } else {
+            throw exception(ASIGNATURA, ENTITY_NOT_FOUND, id.toString());
         }
-        throw exception(ASIGNATURA, ENTITY_NOT_FOUND, id.toString());
     }
 
     /**

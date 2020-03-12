@@ -99,8 +99,9 @@ public class HorarioServiceImpl implements HorarioService {
 
         if (model.isPresent()) {
             repo.delete(model.get());
+        } else {
+            throw exception(HORARIO, ENTITY_NOT_FOUND, id.toString());
         }
-        throw exception(HORARIO, ENTITY_NOT_FOUND, id.toString());
     }
 
     @Transactional
@@ -153,12 +154,12 @@ public class HorarioServiceImpl implements HorarioService {
                     horario1.setPeriodo(bloqueParaAsignar);
                     horario1.setCargaAcademica(cargaAleatoria);
 
-                    if (horas > 0 && bloque.getBloqueHorario() < 14) {
+                    if (horas > 0 && bloqueParaAsignar.getBloqueHorario() < 14) {
 
                         // TODO agregar variable para hora que no queda en pareja y pueda ser agregada
                         // otro día.
 
-                        Periodo siguienteBloque = pr.getOne(bloque.getId() + 1);
+                        Periodo siguienteBloque = pr.getOne(bloqueParaAsignar.getId() + 1);
 
                         if (siguienteBloque.getEstatus() && notAlreadyPersisted(cargaAleatoria.getId(), dia.toString(),
                                 siguienteBloque.getId())) {
