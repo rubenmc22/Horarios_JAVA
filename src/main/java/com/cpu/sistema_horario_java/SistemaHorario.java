@@ -235,7 +235,8 @@ public class SistemaHorario {
 
 			log.info("************ GENERANDO HORARIOS ************");
 			hsi.generar();
-			log.info("************ HORARIOS GENERANDOS ************");
+			log.info("************ HORARIOS GENERANDOS ************\n");
+			log.info("************ END DATA LOADING ************\n");
 
 		};
 	}

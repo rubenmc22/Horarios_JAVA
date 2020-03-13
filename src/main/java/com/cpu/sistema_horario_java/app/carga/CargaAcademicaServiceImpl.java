@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.cpu.sistema_horario_java.app.util.types.EntityType;
+import com.cpu.sistema_horario_java.app.horario.HorarioRepository;
 import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
@@ -20,6 +21,9 @@ public class CargaAcademicaServiceImpl implements CargaAcademicaService {
 
     @Autowired
     CargaAcademicaRepository repo;
+
+    @Autowired
+    HorarioRepository hr;
 
     @Autowired
     CargaAcademicaMapper mapper;
@@ -62,9 +66,11 @@ public class CargaAcademicaServiceImpl implements CargaAcademicaService {
         Optional<CargaAcademica> model = repo.findById(id);
 
         if (model.isPresent()) {
+            hr.deleteAll();
             repo.delete(model.get());
+        } else {
+            throw exception(CARGA_ACADEMICA, ENTITY_NOT_FOUND, id.toString());
         }
-        throw exception(CARGA_ACADEMICA, ENTITY_NOT_FOUND, id.toString());
     }
 
     /**
