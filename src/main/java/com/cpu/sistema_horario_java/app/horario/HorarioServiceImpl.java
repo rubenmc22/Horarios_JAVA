@@ -2,6 +2,7 @@ package com.cpu.sistema_horario_java.app.horario;
 
 import com.cpu.sistema_horario_java.app.util.types.Dia;
 import com.cpu.sistema_horario_java.app.util.types.EntityType;
+import com.cpu.sistema_horario_java.app.util.types.Estatus;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
 import static com.cpu.sistema_horario_java.app.util.types.EntityType.HORARIO;
@@ -9,7 +10,6 @@ import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPL
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@SuppressWarnings("uncheked")
 public class HorarioServiceImpl implements HorarioService {
 
     @Autowired
@@ -107,92 +108,132 @@ public class HorarioServiceImpl implements HorarioService {
     @Transactional
     public void generar() {
 
-        List<Periodo> periodos = pr.findAll();
+        int tries = 0;
+        List<Periodo> bloquesAcademicos = pr.periodosParaAsignar();
         List<Dia> dias = new ArrayList<>();
+
         for (Dia dia : Dia.values()) {
             if (dia.getNumeroDia() < 6) {
                 dias.add(dia);
             }
         }
+
         List<CargaAcademica> cargasAcademicas = car.findAll();
 
-        Collections.shuffle(dias);
-        Collections.shuffle(periodos);
-        Collections.shuffle(cargasAcademicas);
+        for (CargaAcademica cargaAcademica : cargasAcademicas) {
+            Integer horas = cargaAcademica.getHoras();
 
-        for (Periodo bloque : periodos) {
-            otro_bloque:
+            while (horas > 0) {
+                Horario horario;
+                Dia diaTentativo;
+                Periodo periodoTentativo;
 
-            for (Dia dia : dias) {
-                log.info("dia: " + dia);
-                log.info("bloque: " + bloque);
+                if (horas.equals(1)) {
+                    horario = new Horario();
+                    diaTentativo = (Dia) getRandomElement(dias);
+                    periodoTentativo = (Periodo) getRandomElement(bloquesAcademicos);
 
-                if (!bloque.getEstatus()) {
-                    log.info("bloque inactivo: " + bloque);
-                    break otro_bloque;
-                }
-
-                if (cargasAcademicas.size() <= 0) {
-                    break;
-                }
-                boolean primeraVuelta = true;
-                CargaAcademica cargaAleatoria = getRandomCargaAcademica(cargasAcademicas);
-                int horas = cargaAleatoria.getHoras();
-
-                while (horas >= 1) {
-                    Horario horario1 = new Horario();
-                    Periodo bloqueParaAsignar = new Periodo();
-
-                    if (primeraVuelta) {
-                        bloqueParaAsignar = bloque;
-                        primeraVuelta = false;
-                    } else {
-                        bloqueParaAsignar = getRandomPeriod(periodos, false);
-                    }
-
-                    horario1.setDia(dia);
-                    horario1.setPeriodo(bloqueParaAsignar);
-                    horario1.setCargaAcademica(cargaAleatoria);
-
-                    if (horas > 0 && bloqueParaAsignar.getBloqueHorario() < 14) {
-
-                        // TODO agregar variable para hora que no queda en pareja y pueda ser agregada
-                        // otro día.
-
-                        Periodo siguienteBloque = pr.getOne(bloqueParaAsignar.getId() + 1);
-
-                        if (siguienteBloque.getEstatus() && notAlreadyPersisted(cargaAleatoria.getId(), dia.toString(),
-                                siguienteBloque.getId())) {
-                            Horario horario2 = new Horario();
-
-                            horario2.setDia(dia);
-                            horario2.setPeriodo(siguienteBloque);
-                            horario2.setCargaAcademica(cargaAleatoria);
-                            repo.save(horario2);
-                            horas--;
+                    while (alreadyPersisted(diaTentativo, periodoTentativo)) {
+                        if (tries > 200) {
+                            break;
                         }
 
+                        diaTentativo = (Dia) getRandomElement(dias);
+                        periodoTentativo = (Periodo) getRandomElement(bloquesAcademicos);
+                        tries++;
                     }
 
-                    if (notAlreadyPersisted(cargaAleatoria.getId(), dia.toString(), bloqueParaAsignar.getId())) {
-                        horas--;
-                        repo.save(horario1);
+                    horario.setCargaAcademica(cargaAcademica);
+                    horario.setDia(diaTentativo);
+                    horario.setPeriodo(periodoTentativo);
+
+                    log.info("Not present - saving entity: " + repo.save(horario));
+                    ;
+                    horas--;
+                }
+
+                diaTentativo = (Dia) getRandomElement(dias);
+                List<Periodo> parBloqueTentativo = getValidPeriodoPair(bloquesAcademicos);
+
+                while (alreadyPersisted(diaTentativo, parBloqueTentativo.get(0))
+                        || alreadyPersisted(diaTentativo, parBloqueTentativo.get(1))) {
+                    if (tries > 200) {
+                        break;
                     }
 
+                    diaTentativo = (Dia) getRandomElement(dias);
+                    parBloqueTentativo = getValidPeriodoPair(bloquesAcademicos);
+                    tries++;
+                }
+
+                for (Periodo bloque : parBloqueTentativo) {
+                    horario = new Horario();
+
+                    periodoTentativo = bloque;
+                    horario.setCargaAcademica(cargaAcademica);
+                    horario.setDia(diaTentativo);
+                    horario.setPeriodo(periodoTentativo);
+
+                    log.info("Not present - saving entity: " + repo.save(horario));
+                    horas--;
                 }
 
             }
+            cargaAcademica.setEstatus(Estatus.PROGRAMADA);
+            car.save(cargaAcademica);
+
         }
 
     }
 
-    private Periodo getRandomPeriod(List<Periodo> lista, boolean removeElement) {
-        int randomIndex = new Random().nextInt(lista.size());
-        Periodo elemento = lista.get(randomIndex);
-        if (removeElement) {
-            lista.remove(randomIndex);
+    private List<Periodo> getValidPeriodoPair(List<Periodo> bloquesAcademicos) {
+        List<Periodo> par = new ArrayList<>();
+        Periodo bloque = (Periodo) getRandomElement(bloquesAcademicos);
+        Periodo siguienteBloque = pr.getOne(bloque.getId() + 1L);
+
+        while (siguienteBloque.getEstatus() == Boolean.FALSE) {
+            bloque = (Periodo) getRandomElement(bloquesAcademicos);
+            siguienteBloque = pr.getOne(bloque.getId() + 1L);
         }
-        return elemento;
+
+        par.add(bloque);
+        par.add(siguienteBloque);
+
+        return par;
+    }
+
+    private <T> Object getRandomElement(List<T> list, Boolean removeFromList) {
+        Object element = getRandomElement(list);
+
+        if (removeFromList) {
+            list.remove(element);
+        }
+        return (T) element;
+    }
+
+    private <T> Object getRandomElement(List<T> list, Object ignoreThis, Boolean removeFromList) {
+        Object element = getRandomElement(list, ignoreThis);
+
+        if (removeFromList) {
+            list.remove(element);
+        }
+        return (T) element;
+    }
+
+    private <T> Object getRandomElement(List<T> list, Object ignoreThis) {
+        Object element = getRandomElement(list);
+
+        while (element.equals(ignoreThis)) {
+            element = getRandomElement(list);
+        }
+        return (T) element;
+    }
+
+    private <T> Object getRandomElement(List<T> list) {
+        int randomIndex = new Random().nextInt(list.size());
+        Object element = (T) list.get(randomIndex);
+        return (T) element;
+
     }
 
     private CargaAcademica getRandomCargaAcademica(List<CargaAcademica> lista) {
@@ -202,8 +243,12 @@ public class HorarioServiceImpl implements HorarioService {
         return elemento;
     }
 
-    private boolean notAlreadyPersisted(Long cargaAcademica, String dia, Long periodo) {
-        return !repo.getHorarioByDetails(cargaAcademica, dia, periodo).isPresent();
+    private boolean notAlreadyPersisted(Dia dia, Periodo periodo) {
+        return !repo.getHorarioAsignado(dia, periodo).isPresent();
+    }
+
+    private boolean alreadyPersisted(Dia dia, Periodo periodo) {
+        return repo.getHorarioAsignado(dia, periodo).isPresent();
     }
 
     /**

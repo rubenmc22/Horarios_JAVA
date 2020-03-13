@@ -1,5 +1,7 @@
 package com.cpu.sistema_horario_java.app.carga;
 
+import static com.cpu.sistema_horario_java.app.util.types.Estatus.PENDIENTE;
+
 import java.util.Objects;
 
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.persistence.UniqueConstraint;
 import com.cpu.sistema_horario_java.app.asignatura.Asignatura;
 import com.cpu.sistema_horario_java.app.curso.Curso;
 import com.cpu.sistema_horario_java.app.docente.Docente;
+import com.cpu.sistema_horario_java.app.util.types.Estatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,7 +56,7 @@ public class CargaAcademica {
     private Integer horas = 1;
 
     @Builder.Default
-    private Boolean estatus = true;
+    private Estatus estatus = PENDIENTE;
 
     @Override
     public boolean equals(Object o) {

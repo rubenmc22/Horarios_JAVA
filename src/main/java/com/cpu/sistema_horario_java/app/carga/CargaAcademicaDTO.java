@@ -11,6 +11,6 @@ public class CargaAcademicaDTO {
     private Long curso;
     private Long docente;
     private Integer horas;
-    private Boolean estatus = true;
+    private String estatus = "PENDIENTE";
 
 }

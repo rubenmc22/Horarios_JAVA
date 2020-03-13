@@ -3,6 +3,7 @@ package com.cpu.sistema_horario_java.app.carga;
 import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
 import com.cpu.sistema_horario_java.app.curso.CursoRepository;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
+import com.cpu.sistema_horario_java.app.util.types.Estatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class CargaAcademicaMapper {
         model.setCurso(dto.getCurso() == null ? null : cr.getOne(dto.getCurso()));
         model.setDocente(dto.getDocente() == null ? null : dr.getOne(dto.getDocente()));
         model.setHoras(dto.getHoras());
-        model.setEstatus(dto.getEstatus());
+        model.setEstatus(Estatus.getEstatus(dto.getEstatus()));
 
         return model;
     }
@@ -38,6 +39,7 @@ public class CargaAcademicaMapper {
         model.setCurso(dto.getCurso() == null ? null : cr.getOne(dto.getCurso()));
         model.setDocente(dto.getDocente() == null ? null : dr.getOne(dto.getDocente()));
         model.setHoras(dto.getHoras());
+        model.setEstatus(Estatus.getEstatus(dto.getEstatus()));
         return model;
     }
 
@@ -49,7 +51,7 @@ public class CargaAcademicaMapper {
         dto.setCurso(model.getCurso() == null ? null : model.getCurso().getId());
         dto.setDocente(model.getDocente() == null ? null : model.getDocente().getId());
         dto.setHoras(model.getHoras());
-        dto.setEstatus(model.getEstatus());
+        dto.setEstatus(model.getEstatus().getEstatus());
 
         return dto;
     }
@@ -61,7 +63,7 @@ public class CargaAcademicaMapper {
         dto.setCurso(model.getCurso() == null ? null : model.getCurso().getId());
         dto.setDocente(model.getDocente() == null ? null : model.getDocente().getId());
         dto.setHoras(model.getHoras());
-        dto.setEstatus(model.getEstatus());
+        dto.setEstatus(model.getEstatus().getEstatus());
 
         return dto;
     }
