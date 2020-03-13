@@ -17,7 +17,6 @@ public class HorarioDTO {
     private String docente;
     private String inicioPeriodo;
     private String finPeriodo;
-
     private Boolean estatus = true;
 
 }
