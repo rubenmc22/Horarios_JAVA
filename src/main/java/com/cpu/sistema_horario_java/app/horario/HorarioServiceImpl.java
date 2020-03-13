@@ -10,11 +10,8 @@ import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPL
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -26,6 +23,7 @@ import com.cpu.sistema_horario_java.app.curso.CursoRepository;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
 import com.cpu.sistema_horario_java.app.periodo.Periodo;
 import com.cpu.sistema_horario_java.app.periodo.PeriodoRepository;
+import com.cpu.sistema_horario_java.app.util.ListUtil;
 import com.cpu.sistema_horario_java.app.util.exception.ExceptionType;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +116,7 @@ public class HorarioServiceImpl implements HorarioService {
 
         for (CargaAcademica cargaAcademica : cargasAcademicas) {
             Integer horas = cargaAcademica.getHoras();
-            dias = toList(cargaAcademica.getCurso().getDias());
+            dias = ListUtil.toList(cargaAcademica.getCurso().getDias());
 
             while (horas > 0) {
                 Horario horario;
@@ -127,8 +125,8 @@ public class HorarioServiceImpl implements HorarioService {
 
                 if (horas.equals(1)) {
                     horario = new Horario();
-                    diaTentativo = (Dia) getRandomElement(dias);
-                    periodoTentativo = (Periodo) getRandomElement(bloquesAcademicos);
+                    diaTentativo = (Dia) ListUtil.getRandomElement(dias);
+                    periodoTentativo = (Periodo) ListUtil.getRandomElement(bloquesAcademicos);
 
                     while (alreadyPersisted(diaTentativo.toString(), periodoTentativo.getId(),
                             cargaAcademica.getCurso().getId())) {
@@ -136,8 +134,8 @@ public class HorarioServiceImpl implements HorarioService {
                             break;
                         }
 
-                        diaTentativo = (Dia) getRandomElement(dias);
-                        periodoTentativo = (Periodo) getRandomElement(bloquesAcademicos);
+                        diaTentativo = (Dia) ListUtil.getRandomElement(dias);
+                        periodoTentativo = (Periodo) ListUtil.getRandomElement(bloquesAcademicos);
                         tries++;
                     }
 
@@ -150,7 +148,7 @@ public class HorarioServiceImpl implements HorarioService {
                     horas--;
                 } else {
 
-                    diaTentativo = (Dia) getRandomElement(dias);
+                    diaTentativo = (Dia) ListUtil.getRandomElement(dias);
                     List<Periodo> parBloqueTentativo = getValidPeriodoPair(bloquesAcademicos);
 
                     while (alreadyPersisted(diaTentativo.toString(), parBloqueTentativo.get(0).getId(),
@@ -161,7 +159,7 @@ public class HorarioServiceImpl implements HorarioService {
                             break;
                         }
 
-                        diaTentativo = (Dia) getRandomElement(dias);
+                        diaTentativo = (Dia) ListUtil.getRandomElement(dias);
                         parBloqueTentativo = getValidPeriodoPair(bloquesAcademicos);
                         tries++;
                     }
@@ -187,11 +185,11 @@ public class HorarioServiceImpl implements HorarioService {
 
     private List<Periodo> getValidPeriodoPair(List<Periodo> bloquesAcademicos) {
         List<Periodo> par = new ArrayList<>();
-        Periodo bloque = (Periodo) getRandomElement(bloquesAcademicos);
+        Periodo bloque = (Periodo) ListUtil.getRandomElement(bloquesAcademicos);
         Periodo siguienteBloque = pr.getOne(bloque.getId() + 1L);
 
         while (siguienteBloque.getEstatus() == Boolean.FALSE) {
-            bloque = (Periodo) getRandomElement(bloquesAcademicos);
+            bloque = (Periodo) ListUtil.getRandomElement(bloquesAcademicos);
             siguienteBloque = pr.getOne(bloque.getId() + 1L);
         }
 
@@ -201,54 +199,11 @@ public class HorarioServiceImpl implements HorarioService {
         return par;
     }
 
-    // TODO add this code to list util for convenience
-    // private <T> Object getRandomElement(List<T> list, Boolean removeFromList) {
-    // Object element = getRandomElement(list);
-
-    // if (removeFromList) {
-    // list.remove(element);
-    // }
-    // return (T) element;
-    // }
-
-    // private <T> Object getRandomElement(List<T> list, Object ignoreThis, Boolean
-    // removeFromList) {
-    // Object element = getRandomElement(list, ignoreThis);
-
-    // if (removeFromList) {
-    // list.remove(element);
-    // }
-    // return (T) element;
-    // }
-
-    // private <T> Object getRandomElement(List<T> list, Object ignoreThis) {
-    // Object element = getRandomElement(list);
-
-    // while (element.equals(ignoreThis)) {
-    // element = getRandomElement(list);
-    // }
-    // return (T) element;
-    // }
-
-    private <T> Object getRandomElement(List<T> list) {
-        int randomIndex = new Random().nextInt(list.size());
-        Object element = (T) list.get(randomIndex);
-        return (T) element;
-
-    }
-
     private boolean alreadyPersisted(String dia, Long periodo, Long curso) {
         return repo.getHorarioAsignado(dia, periodo, curso).isPresent();
     }
 
-    private List<Dia> toList(Set<Dia> diasSet) {
-        List<Dia> dias = new ArrayList<>();
-        Iterator<Dia> iterator = diasSet.iterator();
-        while (iterator.hasNext()) {
-            dias.add(iterator.next());
-        }
-        return dias;
-    }
+
 
     /**
      * Returns a new RuntimeException
