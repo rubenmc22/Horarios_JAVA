@@ -5,6 +5,8 @@ import com.cpu.sistema_horario_java.app.util.types.EntityType;
 import com.cpu.sistema_horario_java.app.util.types.Estatus;
 import com.cpu.sistema_horario_java.app.util.exception.SystemException;
 
+import static com.cpu.sistema_horario_java.app.util.types.EntityType.CURSO;
+import static com.cpu.sistema_horario_java.app.util.types.EntityType.CURSO_CARGA_ACADEMICA;
 import static com.cpu.sistema_horario_java.app.util.types.EntityType.HORARIO;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPLICATE_ENTITY;
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
@@ -19,6 +21,7 @@ import javax.transaction.Transactional;
 import com.cpu.sistema_horario_java.app.asignatura.AsignaturaRepository;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademica;
 import com.cpu.sistema_horario_java.app.carga.CargaAcademicaRepository;
+import com.cpu.sistema_horario_java.app.curso.Curso;
 import com.cpu.sistema_horario_java.app.curso.CursoRepository;
 import com.cpu.sistema_horario_java.app.docente.DocenteRepository;
 import com.cpu.sistema_horario_java.app.periodo.Periodo;
@@ -60,7 +63,6 @@ public class HorarioServiceImpl implements HorarioService {
     @Override
     public HorarioDTO buscar(final Long id) {
         final Optional<Horario> model = repo.findById(id);
-
         if (model.isPresent()) {
             return mapper.toDTO(model.get());
         }
@@ -70,6 +72,16 @@ public class HorarioServiceImpl implements HorarioService {
     @Override
     public List<HorarioDTO> listar() {
         return repo.findAll().stream().map(model -> mapper.toDTO(model)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<HorarioDTO> horariosPorCurso(Long id) {
+        final Optional<Curso> curso = cr.findById(id);
+        if (curso.isPresent()) {
+            return repo.findAll().stream().map(model -> mapper.toDTO(model)).collect(Collectors.toList());
+        } else {
+            throw exception(HORARIO, ENTITY_NOT_FOUND, id.toString());
+        }
     }
 
     @Override
@@ -105,14 +117,37 @@ public class HorarioServiceImpl implements HorarioService {
         }
     }
 
+    @Override
     @Transactional
-    public void generar() {
+    public void generarHorarios() {
+        generarHorariosPorCurso(null);
+    }
+
+    @Override
+    @Transactional
+    public void generarHorariosPorCurso(Long id) {
 
         int tries = 0;
+        List<CargaAcademica> cargasAcademicas = new ArrayList<>();
         List<Periodo> bloquesAcademicos = pr.periodosParaAsignar();
+
         List<Dia> dias;
 
-        List<CargaAcademica> cargasAcademicas = car.findAll();
+        if (id == null) {
+            cargasAcademicas = car.findAll();
+        } else {
+            Optional<Curso> curso = cr.findById(id);
+            if (curso.isPresent()) {
+                Optional<List<CargaAcademica>> cargas = car.cargasPorCurso(curso.get());
+                if (cargas.isPresent()) {
+                    cargasAcademicas = cargas.get();
+                } else {
+                    throw exception(CURSO_CARGA_ACADEMICA, ENTITY_NOT_FOUND, id.toString());
+                }
+            } else {
+                throw exception(CURSO, ENTITY_NOT_FOUND, id.toString());
+            }
+        }
 
         for (CargaAcademica cargaAcademica : cargasAcademicas) {
             Integer horas = cargaAcademica.getHoras();
@@ -202,8 +237,6 @@ public class HorarioServiceImpl implements HorarioService {
     private boolean alreadyPersisted(String dia, Long periodo, Long curso) {
         return repo.getHorarioAsignado(dia, periodo, curso).isPresent();
     }
-
-
 
     /**
      * Returns a new RuntimeException

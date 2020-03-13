@@ -8,11 +8,15 @@ public interface HorarioService {
 
     List<HorarioDTO> listar();
 
+    List<HorarioDTO> horariosPorCurso(Long id);
+
     HorarioDTO guardar(HorarioDTO dto);
 
     HorarioDTO actualizar(Long id, HorarioDTO dto);
 
-    void generar();
+    void generarHorarios();
+
+    void generarHorariosPorCurso(Long id);
 
     void eliminar(Long id);
 
