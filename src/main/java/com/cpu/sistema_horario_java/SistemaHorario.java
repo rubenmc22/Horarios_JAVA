@@ -123,6 +123,11 @@ public class SistemaHorario {
 			Set<Dia> dias = Arrays.asList(Dia.LUNES, Dia.MARTES, Dia.MIERCOLES, Dia.JUEVES).stream()
 					.collect(Collectors.toSet());
 
+			Curso cu6 = Curso.builder().nombre("6° año").dias(dias).build();
+			log.info("Guardando: " + cuRepo.save(cu6));
+
+			dias.add(Dia.VIERNES);
+
 			log.info("************ CREANDO CURSOS ************");
 			Curso cu1 = Curso.builder().nombre("1° año").dias(dias).build();
 			log.info("Guardando: " + cuRepo.save(cu1));
@@ -137,9 +142,6 @@ public class SistemaHorario {
 			Curso cu5 = Curso.builder().nombre("5° año").dias(dias).build();
 			log.info("Guardando: " + cuRepo.save(cu5));
 
-			dias.add(Dia.VIERNES);
-			Curso cu6 = Curso.builder().nombre("6° año").dias(dias).build();
-			log.info("Guardando: " + cuRepo.save(cu6));
 			log.info("************ CURSOS CREADOS ************\n");
 
 			log.info("************ CREANDO BLOQUES HORARIOS ************");

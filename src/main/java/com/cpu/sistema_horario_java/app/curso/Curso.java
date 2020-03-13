@@ -1,5 +1,6 @@
 package com.cpu.sistema_horario_java.app.curso;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -37,9 +38,10 @@ public class Curso {
     @Column(name = "descripcion", length = 100)
     private String descripcion;
 
+    @Builder.Default
     @ElementCollection
     @Enumerated(EnumType.STRING)
-    private Set<Dia> dias;
+    private Set<Dia> dias = new HashSet<>();
 
     @Builder.Default
     @Column(name = "estatus")

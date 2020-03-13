@@ -1,9 +1,7 @@
 package com.cpu.sistema_horario_java.app.horario;
 
+import java.util.List;
 import java.util.Optional;
-
-import com.cpu.sistema_horario_java.app.periodo.Periodo;
-import com.cpu.sistema_horario_java.app.util.types.Dia;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface HorarioRepository extends JpaRepository<Horario, Long> {
 
-    @Query(value = "SELECT h FROM Horario h WHERE h.dia = :dia and h.periodo = :periodo")
-    public Optional<Horario> getHorarioAsignado(@Param("dia") Dia dia, @Param("periodo") Periodo periodo);
+    @Query(value = "SELECT * FROM HORARIOS H, CARGAS_ACADEMICAS C WHERE H.DIA = :dia AND H.ID_PERIODO = :periodo AND H.ID_CARGA_ACADEMICA = C.ID AND C.ID_CURSO = :curso", nativeQuery = true)
+    public Optional<List<Horario>> getHorarioAsignado(@Param("dia") String dia, @Param("periodo") Long periodo,
+            @Param("curso") Long curso);
 }

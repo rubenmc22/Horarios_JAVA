@@ -10,9 +10,11 @@ import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.DUPL
 import static com.cpu.sistema_horario_java.app.util.exception.ExceptionType.ENTITY_NOT_FOUND;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -110,18 +112,13 @@ public class HorarioServiceImpl implements HorarioService {
 
         int tries = 0;
         List<Periodo> bloquesAcademicos = pr.periodosParaAsignar();
-        List<Dia> dias = new ArrayList<>();
-
-        for (Dia dia : Dia.values()) {
-            if (dia.getNumeroDia() < 6) {
-                dias.add(dia);
-            }
-        }
+        List<Dia> dias;
 
         List<CargaAcademica> cargasAcademicas = car.findAll();
 
         for (CargaAcademica cargaAcademica : cargasAcademicas) {
             Integer horas = cargaAcademica.getHoras();
+            dias = toList(cargaAcademica.getCurso().getDias());
 
             while (horas > 0) {
                 Horario horario;
@@ -133,7 +130,8 @@ public class HorarioServiceImpl implements HorarioService {
                     diaTentativo = (Dia) getRandomElement(dias);
                     periodoTentativo = (Periodo) getRandomElement(bloquesAcademicos);
 
-                    while (alreadyPersisted(diaTentativo, periodoTentativo)) {
+                    while (alreadyPersisted(diaTentativo.toString(), periodoTentativo.getId(),
+                            cargaAcademica.getCurso().getId())) {
                         if (tries > 200) {
                             break;
                         }
@@ -147,43 +145,44 @@ public class HorarioServiceImpl implements HorarioService {
                     horario.setDia(diaTentativo);
                     horario.setPeriodo(periodoTentativo);
 
-                    log.info("Not present - saving entity: " + repo.save(horario));
-                    ;
+                    log.info("Guardando horario: " + repo.save(horario));
+
                     horas--;
-                }
-
-                diaTentativo = (Dia) getRandomElement(dias);
-                List<Periodo> parBloqueTentativo = getValidPeriodoPair(bloquesAcademicos);
-
-                while (alreadyPersisted(diaTentativo, parBloqueTentativo.get(0))
-                        || alreadyPersisted(diaTentativo, parBloqueTentativo.get(1))) {
-                    if (tries > 200) {
-                        break;
-                    }
+                } else {
 
                     diaTentativo = (Dia) getRandomElement(dias);
-                    parBloqueTentativo = getValidPeriodoPair(bloquesAcademicos);
-                    tries++;
+                    List<Periodo> parBloqueTentativo = getValidPeriodoPair(bloquesAcademicos);
+
+                    while (alreadyPersisted(diaTentativo.toString(), parBloqueTentativo.get(0).getId(),
+                            cargaAcademica.getCurso().getId())
+                            || alreadyPersisted(diaTentativo.toString(), parBloqueTentativo.get(1).getId(),
+                                    cargaAcademica.getCurso().getId())) {
+                        if (tries > 200) {
+                            break;
+                        }
+
+                        diaTentativo = (Dia) getRandomElement(dias);
+                        parBloqueTentativo = getValidPeriodoPair(bloquesAcademicos);
+                        tries++;
+                    }
+
+                    for (Periodo bloque : parBloqueTentativo) {
+                        horario = new Horario();
+
+                        periodoTentativo = bloque;
+                        horario.setCargaAcademica(cargaAcademica);
+                        horario.setDia(diaTentativo);
+                        horario.setPeriodo(periodoTentativo);
+
+                        log.info("Guardando horario: " + repo.save(horario));
+                        horas--;
+                    }
+
                 }
-
-                for (Periodo bloque : parBloqueTentativo) {
-                    horario = new Horario();
-
-                    periodoTentativo = bloque;
-                    horario.setCargaAcademica(cargaAcademica);
-                    horario.setDia(diaTentativo);
-                    horario.setPeriodo(periodoTentativo);
-
-                    log.info("Not present - saving entity: " + repo.save(horario));
-                    horas--;
-                }
-
             }
             cargaAcademica.setEstatus(Estatus.PROGRAMADA);
             car.save(cargaAcademica);
-
         }
-
     }
 
     private List<Periodo> getValidPeriodoPair(List<Periodo> bloquesAcademicos) {
@@ -202,32 +201,34 @@ public class HorarioServiceImpl implements HorarioService {
         return par;
     }
 
-    private <T> Object getRandomElement(List<T> list, Boolean removeFromList) {
-        Object element = getRandomElement(list);
+    // TODO add this code to list util for convenience
+    // private <T> Object getRandomElement(List<T> list, Boolean removeFromList) {
+    // Object element = getRandomElement(list);
 
-        if (removeFromList) {
-            list.remove(element);
-        }
-        return (T) element;
-    }
+    // if (removeFromList) {
+    // list.remove(element);
+    // }
+    // return (T) element;
+    // }
 
-    private <T> Object getRandomElement(List<T> list, Object ignoreThis, Boolean removeFromList) {
-        Object element = getRandomElement(list, ignoreThis);
+    // private <T> Object getRandomElement(List<T> list, Object ignoreThis, Boolean
+    // removeFromList) {
+    // Object element = getRandomElement(list, ignoreThis);
 
-        if (removeFromList) {
-            list.remove(element);
-        }
-        return (T) element;
-    }
+    // if (removeFromList) {
+    // list.remove(element);
+    // }
+    // return (T) element;
+    // }
 
-    private <T> Object getRandomElement(List<T> list, Object ignoreThis) {
-        Object element = getRandomElement(list);
+    // private <T> Object getRandomElement(List<T> list, Object ignoreThis) {
+    // Object element = getRandomElement(list);
 
-        while (element.equals(ignoreThis)) {
-            element = getRandomElement(list);
-        }
-        return (T) element;
-    }
+    // while (element.equals(ignoreThis)) {
+    // element = getRandomElement(list);
+    // }
+    // return (T) element;
+    // }
 
     private <T> Object getRandomElement(List<T> list) {
         int randomIndex = new Random().nextInt(list.size());
@@ -236,19 +237,17 @@ public class HorarioServiceImpl implements HorarioService {
 
     }
 
-    private CargaAcademica getRandomCargaAcademica(List<CargaAcademica> lista) {
-        int randomIndex = new Random().nextInt(lista.size());
-        CargaAcademica elemento = lista.get(randomIndex);
-        lista.remove(randomIndex);
-        return elemento;
+    private boolean alreadyPersisted(String dia, Long periodo, Long curso) {
+        return repo.getHorarioAsignado(dia, periodo, curso).isPresent();
     }
 
-    private boolean notAlreadyPersisted(Dia dia, Periodo periodo) {
-        return !repo.getHorarioAsignado(dia, periodo).isPresent();
-    }
-
-    private boolean alreadyPersisted(Dia dia, Periodo periodo) {
-        return repo.getHorarioAsignado(dia, periodo).isPresent();
+    private List<Dia> toList(Set<Dia> diasSet) {
+        List<Dia> dias = new ArrayList<>();
+        Iterator<Dia> iterator = diasSet.iterator();
+        while (iterator.hasNext()) {
+            dias.add(iterator.next());
+        }
+        return dias;
     }
 
     /**
