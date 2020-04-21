@@ -20,7 +20,16 @@ class SystemExceptionAdvice {
     @ResponseBody
     @ExceptionHandler(SystemException.DuplicateEntityException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public final String handleNotFountExceptions1(Exception ex) {
+    public final String handleDuplicateEntityException(Exception ex) {
+        return ex.getMessage();
+
+    }
+
+    // TODO format exception message for this method
+    @ResponseBody
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public final String handleSpringDuplicateEntityException(Exception ex) {
         return ex.getMessage();
 
     }

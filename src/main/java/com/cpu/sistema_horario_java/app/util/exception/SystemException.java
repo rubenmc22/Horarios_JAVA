@@ -57,6 +57,14 @@ public class SystemException extends RuntimeException {
         }
     }
 
+    public static class ResourceNotAvailableException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
+
+        public ResourceNotAvailableException(String message) {
+            super(message);
+        }
+    }
+
     public static class WrongPasswordException extends RuntimeException {
         private static final long serialVersionUID = 1L;
 
@@ -70,6 +78,8 @@ public class SystemException extends RuntimeException {
         if (ExceptionType.ENTITY_NOT_FOUND.equals(exceptionType)) {
             return new EntityNotFoundException(format(messageTemplate, args));
         } else if (ExceptionType.DUPLICATE_ENTITY.equals(exceptionType)) {
+            return new DuplicateEntityException(format(messageTemplate, args));
+        } else if (ExceptionType.RESOURCE_NOT_AVAILABLE.equals(exceptionType)) {
             return new DuplicateEntityException(format(messageTemplate, args));
         } else if (ExceptionType.WRONG_PASSWORD.equals(exceptionType)) {
             return new WrongPasswordException(format(messageTemplate, args));

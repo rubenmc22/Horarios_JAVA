@@ -2,7 +2,9 @@ package com.cpu.sistema_horario_java.app.usuario;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +21,8 @@ import lombok.NoArgsConstructor;
 public class Usuario {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "SEQ_USUARIOS")
+    @SequenceGenerator(name = "SEQ_USUARIOS", initialValue = 1, allocationSize = 1)
     @Builder.Default
     private Long id = null;
     private String cedula;

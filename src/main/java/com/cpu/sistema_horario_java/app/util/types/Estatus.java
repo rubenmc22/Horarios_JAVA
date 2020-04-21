@@ -1,7 +1,7 @@
 package com.cpu.sistema_horario_java.app.util.types;
 
 public enum Estatus {
-    PENDIENTE("PENDIENTE"), PROGRAMADA("PROGRAMADA");
+    PENDIENTE("PENDIENTE"), PROGRAMADA("PROGRAMADA"), RESERVADA("RESERVADA");
 
     private final String ESTATUS;
 
@@ -19,6 +19,8 @@ public enum Estatus {
         switch (ESTATUS) {
             case "PROGRAMADA":
                 return Estatus.PROGRAMADA;
+            case "RESERVADA":
+                return Estatus.RESERVADA;
             default:
                 return Estatus.PENDIENTE;
         }

@@ -1,8 +1,8 @@
 package com.cpu.sistema_horario_java.app.util.exception;
 
 public enum ExceptionType {
-    ENTITY_NOT_FOUND("not.found"), DUPLICATE_ENTITY("duplicate"), WRONG_PASSWORD("wrong.password"),
-    ENTITY_EXCEPTION("exception");
+    RESOURCE_NOT_AVAILABLE("not.available"), ENTITY_NOT_FOUND("not.found"), DUPLICATE_ENTITY("duplicate"),
+    WRONG_PASSWORD("wrong.password"), ENTITY_EXCEPTION("exception");
 
     String value;
 

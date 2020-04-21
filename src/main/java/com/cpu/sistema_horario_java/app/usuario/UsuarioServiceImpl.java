@@ -28,8 +28,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         if (model.isPresent()) {
             return model.get();
+        } else {
+            throw exception(USUARIO, ENTITY_NOT_FOUND, id.toString());
         }
-        throw exception(USUARIO, ENTITY_NOT_FOUND, id.toString());
     }
 
     @Override
@@ -43,9 +44,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         if (!model.isPresent()) {
             return repo.save(dto);
+        } else {
+            throw exception(USUARIO, DUPLICATE_ENTITY, dto.getId().toString());
         }
-
-        throw exception(USUARIO, DUPLICATE_ENTITY, dto.getId().toString());
     }
 
     @Override
@@ -55,9 +56,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         if (model.isPresent()) {
             dto.setId(id);
-            repo.save(dto);
+            return repo.save(dto);
+        } else {
+            throw exception(USUARIO, ENTITY_NOT_FOUND, id.toString());
         }
-        throw exception(USUARIO, ENTITY_NOT_FOUND, id.toString());
     }
 
     @Override
@@ -66,8 +68,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         if (model.isPresent()) {
             repo.delete(model.get());
+        } else {
+            throw exception(USUARIO, ENTITY_NOT_FOUND, id.toString());
         }
-        throw exception(USUARIO, ENTITY_NOT_FOUND, id.toString());
     }
 
     @Override
@@ -78,10 +81,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (model.isPresent()) {
             if (model.get().getPassword().equals(dto.getPassword())) {
                 return model.get();
+            } else {
+                throw exception(USUARIO, WRONG_PASSWORD, dto.getCedula());
             }
-            throw exception(USUARIO, WRONG_PASSWORD, dto.getCedula());
+        } else {
+            throw exception(USUARIO, ENTITY_NOT_FOUND, dto.getCedula());
         }
-        throw exception(USUARIO, ENTITY_NOT_FOUND, dto.getCedula());
     }
 
     /**
