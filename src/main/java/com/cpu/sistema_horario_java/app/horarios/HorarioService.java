@@ -27,5 +27,7 @@ public interface HorarioService {
     void eliminarTodo();
 
     void eliminar(Long id);
+    
+    void eliminarPorCurso(Long id);
 
 }

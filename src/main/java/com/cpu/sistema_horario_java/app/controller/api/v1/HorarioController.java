@@ -70,4 +70,10 @@ public class HorarioController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/api/v1/horarios/curso/{id}")
+    public ResponseEntity<?> eliminarPorCurso(@PathVariable Long id) {
+        service.eliminarPorCurso(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

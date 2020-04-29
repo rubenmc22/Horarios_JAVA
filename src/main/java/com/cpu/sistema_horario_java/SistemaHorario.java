@@ -2,11 +2,6 @@ package com.cpu.sistema_horario_java;
 
 import java.time.LocalTime;
 
-import com.cpu.sistema_horario_java.app.asignaturas.AsignaturaRepository;
-import com.cpu.sistema_horario_java.app.cargas.CargaAcademicaRepository;
-import com.cpu.sistema_horario_java.app.cursos.CursoRepository;
-import com.cpu.sistema_horario_java.app.docentes.DocenteRepository;
-import com.cpu.sistema_horario_java.app.horarios.HorarioRepository;
 import com.cpu.sistema_horario_java.app.horarios.HorarioServiceImpl;
 import com.cpu.sistema_horario_java.app.horas.BloqueHorario;
 import com.cpu.sistema_horario_java.app.horas.BloqueHorarioRepository;
@@ -33,19 +28,14 @@ public class SistemaHorario {
 	}
 
 	@Bean
-	CommandLineRunner init(AsignaturaRepository aRepo, CargaAcademicaRepository cRepo, DocenteRepository dRepo,
-			CursoRepository cuRepo, BloqueHorarioRepository pRepo, HorarioRepository hr, UsuarioRepository ur) {
+	CommandLineRunner init(BloqueHorarioRepository pRepo, UsuarioRepository ur) {
 
 		return args -> {
 			log.info("************ DATA LOADING ************\n");
 
 			log.info("************ CREANDO USUARIOS ************");
-			Usuario u1 = Usuario.builder().cedula("21130426").password("21130426").build();
+			Usuario u1 = Usuario.builder().cedula("admin").password("admin").build();
 			log.info("Guardando: " + ur.save(u1));
-			Usuario u2 = Usuario.builder().cedula("24367965").password("24367965").build();
-			log.info("Guardando: " + ur.save(u2));
-			Usuario u3 = Usuario.builder().cedula("20793760").password("20793760").build();
-			log.info("Guardando: " + ur.save(u3));
 			log.info("************ USUARIOS CREADOS ************\n");
 
 			log.info("************ CREANDO BLOQUES HORARIOS ************");

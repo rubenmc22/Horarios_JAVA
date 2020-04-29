@@ -145,6 +145,20 @@ public class HorarioServiceImpl implements HorarioService {
     }
 
     @Override
+    public void eliminarPorCurso(Long id) {
+        final Optional<Curso> curso = cr.findById(id);
+        if (curso.isPresent()) {
+
+            Optional<List<Horario>> horarios = repo.horariosPorCurso(id);
+            if (horarios.isPresent()) {
+                repo.deleteInBatch(horarios.get());
+            }
+        } else {
+            throw exception(CURSO, ENTITY_NOT_FOUND, id.toString());
+        }
+    }
+
+    @Override
     @Transactional
     public void generarHorarios() {
         // se pasa el valor null como id de curso para activar la generación de los
@@ -167,7 +181,7 @@ public class HorarioServiceImpl implements HorarioService {
         // id = null -> generar los horarios para todas las cargas académicas no
         // programadas
         if (id == null) {
-            Optional<List<CargaAcademica>> cargasPendientes = car.cargasPorOtrosEstatus(Estatus.PROGRAMADA);
+            Optional<List<CargaAcademica>> cargasPendientes = car.cargasPendientes();
             if (cargasPendientes.isPresent()) {
                 cargasAcademicas = cargasPendientes.get();
             } else {
@@ -178,7 +192,7 @@ public class HorarioServiceImpl implements HorarioService {
             // a un curso en particular
             Optional<Curso> curso = cr.findById(id);
             if (curso.isPresent()) {
-                Optional<List<CargaAcademica>> cargas = car.cargasPorCurso(curso.get());
+                Optional<List<CargaAcademica>> cargas = car.cargasPendientesPorCurso(curso.get().getId());
                 if (cargas.isPresent()) {
                     cargasAcademicas = cargas.get();
                 } else {

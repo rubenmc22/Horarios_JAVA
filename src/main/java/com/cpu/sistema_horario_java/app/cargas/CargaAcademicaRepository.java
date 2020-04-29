@@ -16,7 +16,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface CargaAcademicaRepository extends JpaRepository<CargaAcademica, Long> {
 
-    @Query(value = "SELECT c FROM CargaAcademica c WHERE c.curso = :curso")
+    @Query("SELECT c FROM CargaAcademica c WHERE c.curso = :curso")
     public Optional<List<CargaAcademica>> cargasPorCurso(@Param("curso") Curso curso);
 
     @Modifying
@@ -37,11 +37,14 @@ public interface CargaAcademicaRepository extends JpaRepository<CargaAcademica, 
     @Query("SELECT c FROM CargaAcademica c WHERE c.estatus = :estatus")
     public Optional<List<CargaAcademica>> cargasPorEstatus(@Param("estatus") Estatus estatus);
 
-    @Query("SELECT c FROM CargaAcademica c WHERE c.estatus <> :estatus")
-    public Optional<List<CargaAcademica>> cargasPorOtrosEstatus(@Param("estatus") Estatus estatus);
+    @Query(value = "SELECT * FROM CARGAS_ACADEMICAS C WHERE C.ESTATUS <> 'PROGRAMADA'", nativeQuery = true)
+    public Optional<List<CargaAcademica>> cargasPendientes();
+
+    @Query(value = "SELECT * FROM CARGAS_ACADEMICAS C WHERE C.ID_CURSO = :curso AND C.ESTATUS <> 'PROGRAMADA'", nativeQuery = true)
+    public Optional<List<CargaAcademica>> cargasPendientesPorCurso(@Param("curso") Long curso);
 
     @Query("SELECT c FROM CargaAcademica c WHERE c.curso = :curso AND c.estatus = :estatus")
-    public void cargasPorCursoPorEstatus(@Param("curso") Curso curso, @Param("estatus") Estatus estatus);
+    public Optional<List<CargaAcademica>> cargasPorCursoPorEstatus(@Param("curso") Curso curso, @Param("estatus") Estatus estatus);
 
     @Modifying
     @Transactional
